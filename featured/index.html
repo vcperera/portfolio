@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Featured - VC.Perera</title>
+<meta name="description" content="Press, posts and mentions featuring Vishal C. Perera from across the network." />
+<meta name="theme-color" content="#05060a" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305060a'/%3E%3Ctext x='26' y='44' font-family='Space Grotesk,Segoe UI,Arial,sans-serif' font-size='30' font-weight='700' font-style='italic' fill='%23eef2fa' text-anchor='middle'%3EVC%3C/text%3E%3Ccircle cx='48' cy='44' r='4.6' fill='%236ea8ff'/%3E%3C/svg%3E" />
+<script>(function(){try{if(sessionStorage.getItem("ptNav")==="1"){sessionStorage.removeItem("ptNav");document.documentElement.classList.add("pt-enter");}}catch(e){}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/mission.css">
+<style>
+
+#f-imgwrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+.modal-img{max-width:88vw;max-height:86vh;border-radius:12px;display:block;box-shadow:0 30px 80px rgba(0,0,0,.6);}
+
+.nb-name i{font-style:italic;letter-spacing:0.01em;}
+.nb-dot{color:var(--signal);}
+.nav-clock{display:none !important;}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="pt" aria-hidden="true"><span class="pt-mark">Loading</span></div>
+
+<header class="nav">
+  <a class="nav-brand" href="../index.html" aria-label="Home">
+    <span class="sig"></span>
+    <span class="nb-txt">
+      <span class="nb-name"><i>VC</i><span class="nb-dot">.</span>Perera</span>
+    </span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="../projects/index.html" data-scramble><span class="idx">01</span>PROJECTS</a>
+    <a href="../certifications/index.html" data-scramble><span class="idx">02</span>ACCOLADES</a>
+    <a href="index.html" class="active" data-scramble><span class="idx">03</span>FEATURED</a>
+    <a href="../index.html#comms" data-scramble><span class="idx">04</span>COMMS</a>
+  </nav>
+  <span class="nav-spacer"></span>
+  <div class="nav-tail">
+    <button class="nav-burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mmenu" aria-label="Mobile">
+  <a href="../index.html"><span class="idx">00</span>Home</a>
+  <a href="../projects/index.html"><span class="idx">01</span>Projects</a>
+  <a href="../certifications/index.html"><span class="idx">02</span>Accolades</a>
+  <a href="index.html"><span class="idx">03</span>Featured</a>
+  <a href="../index.html#comms"><span class="idx">04</span>Comms</a>
+  <div class="mmeta">VC.PERERA // MISSION CONTROL // 2026</div>
+</nav>
+
+<div class="hud" aria-hidden="true">
+  <span class="hud-corner tl"></span><span class="hud-corner tr"></span>
+  <span class="hud-corner bl"></span><span class="hud-corner br"></span>
+  <span class="hud-alt" data-alt>ALT <b>000%</b></span>
+  <span class="hud-sys"><span class="blip"></span>ALL SYSTEMS NOMINAL</span>
+</div>
+
+<div class="site">
+<section class="page-hero">
+  <div class="ph-kicker" data-reveal="fade">
+    <span class="tick"></span>
+    <span class="mlabel">PRESS · POSTS · MENTIONS</span>
+    <p class="hero-quote" id="quote-anim" data-reveal style="--rd:320ms"><span class="q-text"></span><span class="q-cursor"></span></p>
+  </div>
+  <h1><span data-split="chars" data-split-step="20">SIGNALS</span> <span class="ghost" data-split="chars" data-split-step="20" data-split-delay="240">RECEIVED</span></h1>
+  <div class="ph-meta">
+    <div class="filter-row" id="filter-row" data-reveal style="--rd:220ms">
+      <div class="dd" data-group="tag">
+        <button class="dd-btn" type="button">
+          <span class="dd-lead">Topic</span>
+          <span class="dd-val">All</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="dd-menu"></div>
+      </div>
+      <button class="clear-btn" id="clear-filters" style="display:none" aria-label="Clear filter" title="Clear filter">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <span class="ph-results"><b class="ph-dot">&#x25CF;</b><span id="results-meta"></span></span>
+  </div>
+</section>
+
+<div class="page-wrap">
+  <div id="render-root"></div>
+</div>
+</div>
+
+<footer class="footer">
+  <span>© <span id="yr"></span> VC.PERERA</span>
+</footer>
+
+<noscript><style>
+  [data-reveal]{opacity:1 !important;transform:none !important;filter:none !important;}
+  .pt{display:none !important;} .sp-i{transform:none !important;}
+</style></noscript>
+
+<script src="../assets/mission.js"></script>
+<div class="modal-overlay" id="f-modal" role="dialog" aria-modal="true" aria-label="Featured preview">
+  <button class="modal-close" id="f-close" aria-label="Close preview">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <div id="f-imgwrap"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="../assets/data.js" data-workbook="../fetch.xlsx"></script>
+<script src="featured.js?v=3"></script>
+<script>
+
+(function(){
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.querySelectorAll(".page-hero [data-split]").forEach(el=>el.classList.add("sp-run"));
+  }));
+})();
+
+(function(){
+  var root=document.getElementById("render-root"); if(!root||!("MutationObserver" in window)) return;
+  var apply=function(){
+    root.querySelectorAll(".thumb-click").forEach(function(el){ el.setAttribute("data-cursor","OPEN"); });
+  };
+  new MutationObserver(apply).observe(root,{childList:true,subtree:true});
+  apply();
+})();
+
+(function heroQuoteTypewriter(){
+  var el = document.getElementById("quote-anim");
+  if(!el) return;
+
+  var OPEN = "“";
+  var PART_A = "Do what you can’t. Eventually - ";
+  var PART_B = "You can";
+  var PERIOD = ".";
+  var CLOSE = "”";
+  var INSERT = " do Anything. But you can’t do Everything.";
+
+  var FULL1 = OPEN + PART_A + PART_B + PERIOD + CLOSE;
+  var WHITE_BASE = OPEN + PART_B;
+  var FULL2 = WHITE_BASE + INSERT + CLOSE;
+
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) {
+    el.textContent = "";
+    var staticSpan = document.createElement("span");
+    staticSpan.textContent = FULL1;
+    el.appendChild(staticSpan);
+    return;
+  }
+
+  var TYPE_MS = 105, DELETE_MS = 96, HOLD_MS = 3000, GAP_MS = 350, START_MS = 900;
+
+  function paint(parts){
+    while (el.firstChild) el.removeChild(el.firstChild);
+    parts.forEach(function(p){
+      if (p === "CURSOR"){
+        var c = document.createElement("span");
+        c.className = "q-cursor";
+        el.appendChild(c);
+      } else if (p.text) {
+        var s = document.createElement("span");
+        s.className = p.grey ? "q-text q-grey" : "q-text";
+        s.textContent = p.text;
+        el.appendChild(s);
+      }
+    });
+  }
+
+  var ci = 0;
+
+  function typeFull1(){
+    ci++;
+    paint([{ text: FULL1.slice(0, ci) }, "CURSOR"]);
+    if (ci < FULL1.length) setTimeout(typeFull1, TYPE_MS);
+    else setTimeout(eraseFront, HOLD_MS);
+  }
+
+  var remainingA = 0;
+  function eraseFront(){
+    remainingA++;
+    var left = OPEN + PART_A.slice(0, PART_A.length - remainingA);
+    var right = PART_B + PERIOD + CLOSE;
+    paint([{ text: left }, "CURSOR", { text: right }]);
+    if (remainingA < PART_A.length) setTimeout(eraseFront, DELETE_MS);
+    else setTimeout(moveCursorToPeriod, DELETE_MS);
+  }
+
+  function moveCursorToPeriod(){
+    paint([{ text: WHITE_BASE }, "CURSOR", { text: PERIOD + CLOSE }]);
+    setTimeout(removePeriod, DELETE_MS);
+  }
+
+  function removePeriod(){
+    paint([{ text: WHITE_BASE }, "CURSOR", { text: CLOSE }]);
+    setTimeout(startInsert, DELETE_MS);
+  }
+
+  function startInsert(){
+    ci = 0;
+    typeInsert();
+  }
+
+  function typeInsert(){
+    ci++;
+    if (ci < INSERT.length) {
+      paint([
+        { text: WHITE_BASE },
+        { text: INSERT.slice(0, ci), grey: true },
+        "CURSOR",
+        { text: CLOSE, grey: true }
+      ]);
+      setTimeout(typeInsert, TYPE_MS);
+    } else {
+      paint([
+        { text: WHITE_BASE },
+        { text: INSERT, grey: true },
+        { text: CLOSE, grey: true },
+        "CURSOR"
+      ]);
+      setTimeout(beginEraseAll, HOLD_MS);
+    }
+  }
+
+  var eraseCi = 0;
+  var whiteLen = WHITE_BASE.length;
+  function beginEraseAll(){
+    eraseCi = FULL2.length;
+    eraseAll();
+  }
+
+  function eraseAll(){
+    eraseCi--;
+    if (eraseCi > whiteLen) {
+      paint([
+        { text: FULL2.slice(0, whiteLen) },
+        { text: FULL2.slice(whiteLen, eraseCi), grey: true },
+        "CURSOR"
+      ]);
+    } else {
+      paint([{ text: FULL2.slice(0, eraseCi) }, "CURSOR"]);
+    }
+    if (eraseCi > 0) setTimeout(eraseAll, DELETE_MS);
+    else {
+      remainingA = 0;
+      ci = 0;
+      paint(["CURSOR"]);
+      setTimeout(typeFull1, GAP_MS);
+    }
+  }
+
+  setTimeout(typeFull1, START_MS);
+})();
+document.getElementById("yr").textContent=new Date().getFullYear();
+</script>
+<script src="../assets/space-bg.js" defer></script>
+<script>
+
+(function fixScrambleCompletion() {
+  function init() {
+    const links = document.querySelectorAll('.nav-links a[data-scramble]');
+
+    links.forEach(link => {
+
+      const idxSpan = link.querySelector('.idx');
+      const idxText = idxSpan ? idxSpan.textContent : '';
+      let text = link.textContent.trim();
+      if (idxText) {
+        text = text.replace(idxText, '').trim();
+      }
+
+      const newLink = document.createElement('a');
+      newLink.href = link.href;
+      newLink.className = link.className;
+
+      Array.from(link.attributes).forEach(attr => {
+        if (attr.name !== 'data-scramble') {
+          newLink.setAttribute(attr.name, attr.value);
+        }
+      });
+
+      newLink.innerHTML = `<span class="idx">${idxText}</span>${text}`;
+
+      link.parentNode.replaceChild(newLink, link);
+
+      let scrambleTimer = null;
+      let isScrambling = false;
+      let shouldComplete = false;
+
+      newLink.addEventListener('mouseenter', function(e) {
+
+        if (isScrambling) {
+          shouldComplete = true;
+          return;
+        }
+
+        if (scrambleTimer) {
+          clearInterval(scrambleTimer);
+          scrambleTimer = null;
+        }
+
+        isScrambling = true;
+        shouldComplete = false;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const duration = 500;
+        const steps = 20;
+        let step = 0;
+
+        scrambleTimer = setInterval(() => {
+          step++;
+          const progress = step / steps;
+
+          let result = '';
+          const revealCount = Math.floor(text.length * Math.min(progress, 1));
+
+          for (let i = 0; i < text.length; i++) {
+            if (i < revealCount) {
+              result += text[i];
+            } else {
+              result += chars[Math.floor(Math.random() * chars.length)];
+            }
+          }
+
+          if (idxText) {
+            this.innerHTML = `<span class="idx">${idxText}</span>${result}`;
+          } else {
+            this.textContent = result;
+          }
+
+          if (progress >= 1 || shouldComplete) {
+            clearInterval(scrambleTimer);
+            scrambleTimer = null;
+            isScrambling = false;
+            shouldComplete = false;
+
+            if (idxText) {
+              this.innerHTML = `<span class="idx">${idxText}</span>${text}`;
+            } else {
+              this.textContent = text;
+            }
+          }
+        }, duration / steps);
+      });
+
+      newLink.addEventListener('mouseleave', function(e) {
+        if (isScrambling) {
+          shouldComplete = true;
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

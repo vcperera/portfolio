@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Missions — VC.Perera</title>
+<meta name="description" content="Projects by Vishal C. Perera — aerospace research, ventures and builds with full mission briefs." />
+<meta name="theme-color" content="#05060a" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305060a'/%3E%3Ctext x='26' y='44' font-family='Space Grotesk,Segoe UI,Arial,sans-serif' font-size='30' font-weight='700' font-style='italic' fill='%23eef2fa' text-anchor='middle'%3EVC%3C/text%3E%3Ccircle cx='48' cy='44' r='4.6' fill='%236ea8ff'/%3E%3C/svg%3E" />
+<script>(function(){try{if(sessionStorage.getItem("ptNav")==="1"){sessionStorage.removeItem("ptNav");document.documentElement.classList.add("pt-enter");}}catch(e){}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/mission.css">
+<style>
+
+.modal-project{width:92vw;max-width:1440px;height:85vh;max-height:920px;display:flex;overflow:hidden;
+  border-radius:5px;border:1px solid var(--line-2);box-shadow:0 40px 120px rgba(0,0,0,0.7);}
+@media (max-width:900px){ .modal-project{flex-direction:column;width:94vw;height:90vh;} }
+.detail-media{flex:0 0 60%;min-width:0;display:flex;flex-direction:column;gap:10px;min-height:0;
+  background:var(--panel);padding:20px;}
+@media (max-width:900px){ .detail-media{flex:1 1 55%;} }
+.media-main{position:relative;flex:1;min-height:0;background:var(--void-2);border:1px solid var(--line);
+  border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.media-main::before{content:"";position:absolute;top:8px;left:8px;width:14px;height:14px;z-index:2;
+  border-top:1px solid var(--line-2);border-left:1px solid var(--line-2);pointer-events:none;}
+.media-main::after{content:"";position:absolute;bottom:8px;right:8px;width:14px;height:14px;z-index:2;
+  border-bottom:1px solid var(--line-2);border-right:1px solid var(--line-2);pointer-events:none;}
+.media-main img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;}
+.media-strip{display:flex;justify-content:center;gap:7px;flex:none;overflow-x:auto;padding:2px;}
+.media-thumb{flex:none;width:52px;height:40px;border-radius:3px;overflow:hidden;
+  border:1px solid var(--line);cursor:pointer;opacity:0.45;background:var(--panel-2);
+  transition:all 240ms ease;}
+.media-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.media-thumb.active{opacity:1;border-color:var(--signal);box-shadow:0 0 10px var(--signal-soft);}
+.media-thumb:hover{opacity:1;}
+.detail-text{flex:0 0 40%;min-width:0;display:flex;flex-direction:column;min-height:0;overflow:hidden;
+  background:var(--panel-2);padding:34px 36px;border-left:1px solid var(--line);position:relative;}
+@media (max-width:900px){ .detail-text{flex:1 1 45%;border-left:none;border-top:1px solid var(--line);padding:24px;} }
+.detail-text::before{content:"// MISSION BRIEF";position:absolute;top:14px;right:16px;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:0.26em;color:var(--faint);}
+.detail-title{font-size:1.24rem;font-weight:700;letter-spacing:-0.015em;color:var(--ink);line-height:1.3;flex:none;}
+.detail-desc{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--ok);margin-top:12px;line-height:1.6;flex:none;}
+.detail-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;flex:none;}
+.detail-explanation{margin-top:20px;flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;
+  padding-right:6px;}
+.detail-explanation p{font-size:0.84rem;color:var(--dim);line-height:1.7;margin-bottom:14px;}
+.detail-explanation p:last-child{margin-bottom:0;}
+.detail-explanation p::first-letter{color:var(--signal-2);}
+.project-nav{position:fixed;bottom:24px;right:24px;z-index:950;display:none;gap:10px;}
+.project-nav button{width:46px;height:46px;border-radius:50%;background:var(--panel-2);
+  border:1px solid var(--line-2);color:var(--dim);cursor:pointer;transition:all 240ms ease;
+  display:flex;align-items:center;justify-content:center;}
+.project-nav button:hover{color:var(--void);border-color:var(--signal);background:var(--signal);}
+.project-nav button svg{width:19px;height:19px;}
+
+/* 3 tidy lines at the smaller size (the shared .card-desc reserves a
+   2-line box at 0.82rem, which left a half-visible third line). */
+.card-desc{font-size:0.656rem;height:calc(3 * 0.656rem * 1.5);-webkit-line-clamp:3;}
+
+.nb-name i{font-style:italic;letter-spacing:0.01em;}
+.nb-dot{color:var(--signal);}
+.nav-clock{display:none !important;}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="pt" aria-hidden="true"><span class="pt-mark">Loading</span></div>
+
+<header class="nav">
+  <a class="nav-brand" href="../index.html" aria-label="Home">
+    <span class="sig"></span>
+    <span class="nb-txt">
+      <span class="nb-name"><i>VC</i><span class="nb-dot">.</span>Perera</span>
+    </span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="index.html" class="active" data-scramble><span class="idx">01</span>PROJECTS</a>
+    <a href="../certifications/index.html" data-scramble><span class="idx">02</span>ACCOLADES</a>
+    <a href="../featured/index.html" data-scramble><span class="idx">03</span>FEATURED</a>
+    <a href="../index.html#comms" data-scramble><span class="idx">04</span>COMMS</a>
+  </nav>
+  <span class="nav-spacer"></span>
+  <div class="nav-tail">
+    <button class="nav-burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mmenu" aria-label="Mobile">
+  <a href="../index.html"><span class="idx">00</span>Home</a>
+  <a href="index.html"><span class="idx">01</span>Projects</a>
+  <a href="../certifications/index.html"><span class="idx">02</span>Accolades</a>
+  <a href="../featured/index.html"><span class="idx">03</span>Featured</a>
+  <a href="../index.html#comms"><span class="idx">04</span>Comms</a>
+  <div class="mmeta">VC.PERERA // MISSION CONTROL // 2026</div>
+</nav>
+
+<div class="hud" aria-hidden="true">
+  <span class="hud-corner tl"></span><span class="hud-corner tr"></span>
+  <span class="hud-corner bl"></span><span class="hud-corner br"></span>
+  <span class="hud-alt" data-alt>ALT <b>000%</b></span>
+  <span class="hud-sys"><span class="blip"></span>ALL SYSTEMS NOMINAL</span>
+</div>
+
+<div class="site">
+<section class="page-hero">
+  <div class="ph-kicker" data-reveal="fade">
+    <span class="tick"></span>
+    <span class="mlabel">RESEARCH · VENTURES · BUILDS</span>
+    <p class="hero-quote" id="quote-anim" data-reveal style="--rd:320ms"><span class="q-text"></span><span class="q-cursor"></span></p>
+  </div>
+  <h1><span data-split="chars" data-split-step="20">MISSIONS</span> <span class="ghost" data-split="chars" data-split-step="20" data-split-delay="240">&amp; LOGS</span></h1>
+  <div class="ph-meta">
+    <div class="filter-row" id="filter-row" data-reveal style="--rd:220ms">
+      <div class="dd" data-group="tag">
+        <button class="dd-btn" type="button">
+          <span class="dd-lead">Topic</span>
+          <span class="dd-val">All</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="dd-menu"></div>
+      </div>
+      <button class="clear-btn" id="clear-filters" style="display:none" aria-label="Clear filter" title="Clear filter">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <span class="ph-results"><b class="ph-dot">&#x25CF;</b><span id="results-meta"></span></span>
+  </div>
+</section>
+
+<div class="page-wrap" id="page-wrap">
+  <div id="render-root"></div>
+</div>
+</div>
+
+<div class="modal-overlay" id="detail-view" role="dialog" aria-modal="true" aria-label="Project preview">
+  <button class="modal-close" id="detail-close" aria-label="Close preview">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <div class="modal-project" id="detail-body"></div>
+  <div class="project-nav" id="project-nav">
+    <button id="project-prev" aria-label="Previous project" title="Previous project">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <button id="project-next" aria-label="Next project" title="Next project">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  </div>
+</div>
+
+<footer class="footer">
+  <span>© <span id="yr"></span> VC.PERERA</span>
+</footer>
+
+<noscript><style>
+  [data-reveal]{opacity:1 !important;transform:none !important;filter:none !important;}
+  .pt{display:none !important;} .sp-i{transform:none !important;}
+</style></noscript>
+
+<script src="../assets/mission.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="../assets/data.js" data-workbook="../fetch.xlsx"></script>
+<script src="projects.js?v=3"></script>
+<script>
+
+(function(){
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.querySelectorAll(".page-hero [data-split]").forEach(el=>el.classList.add("sp-run"));
+  }));
+})();
+
+(function(){
+  var root=document.getElementById("render-root"); if(!root||!("MutationObserver" in window)) return;
+  var apply=function(){
+    root.querySelectorAll(".thumb-click").forEach(function(el){ el.setAttribute("data-cursor","VIEW"); });
+  };
+  new MutationObserver(apply).observe(root,{childList:true,subtree:true});
+  apply();
+})();
+
+(function heroQuoteTypewriter(){
+  var el=document.getElementById("quote-anim"); if(!el) return;
+  var textEl=el.querySelector(".q-text");
+  var FULL="“Ideas are cheap, execution is everything.”";
+  var reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduceMotion){ textEl.textContent=FULL; return; }
+  var TYPE_MS=90, START_MS=900;
+  var ci=0;
+  function typeFull(){ ci++; textEl.textContent=FULL.slice(0,ci);
+    if(ci<FULL.length) setTimeout(typeFull,TYPE_MS); }
+  setTimeout(typeFull,START_MS);
+})();
+document.getElementById("yr").textContent=new Date().getFullYear();
+</script>
+<script src="../assets/space-bg.js" defer></script>
+<script>
+
+(function fixScrambleCompletion() {
+  function init() {
+    const links = document.querySelectorAll('.nav-links a[data-scramble]');
+
+    links.forEach(link => {
+
+      const idxSpan = link.querySelector('.idx');
+      const idxText = idxSpan ? idxSpan.textContent : '';
+      let text = link.textContent.trim();
+      if (idxText) {
+        text = text.replace(idxText, '').trim();
+      }
+
+      const newLink = document.createElement('a');
+      newLink.href = link.href;
+      newLink.className = link.className;
+
+      Array.from(link.attributes).forEach(attr => {
+        if (attr.name !== 'data-scramble') {
+          newLink.setAttribute(attr.name, attr.value);
+        }
+      });
+
+      newLink.innerHTML = `<span class="idx">${idxText}</span>${text}`;
+
+      link.parentNode.replaceChild(newLink, link);
+
+      let scrambleTimer = null;
+      let isScrambling = false;
+      let shouldComplete = false;
+
+      newLink.addEventListener('mouseenter', function(e) {
+
+        if (isScrambling) {
+          shouldComplete = true;
+          return;
+        }
+
+        if (scrambleTimer) {
+          clearInterval(scrambleTimer);
+          scrambleTimer = null;
+        }
+
+        isScrambling = true;
+        shouldComplete = false;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const duration = 500;
+        const steps = 20;
+        let step = 0;
+
+        scrambleTimer = setInterval(() => {
+          step++;
+          const progress = step / steps;
+
+          let result = '';
+          const revealCount = Math.floor(text.length * Math.min(progress, 1));
+
+          for (let i = 0; i < text.length; i++) {
+            if (i < revealCount) {
+              result += text[i];
+            } else {
+              result += chars[Math.floor(Math.random() * chars.length)];
+            }
+          }
+
+          if (idxText) {
+            this.innerHTML = `<span class="idx">${idxText}</span>${result}`;
+          } else {
+            this.textContent = result;
+          }
+
+          if (progress >= 1 || shouldComplete) {
+            clearInterval(scrambleTimer);
+            scrambleTimer = null;
+            isScrambling = false;
+            shouldComplete = false;
+
+            if (idxText) {
+              this.innerHTML = `<span class="idx">${idxText}</span>${text}`;
+            } else {
+              this.textContent = text;
+            }
+          }
+        }, duration / steps);
+      });
+
+      newLink.addEventListener('mouseleave', function(e) {
+        if (isScrambling) {
+          shouldComplete = true;
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
