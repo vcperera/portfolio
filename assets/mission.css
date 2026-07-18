@@ -49,6 +49,11 @@ body{
   color:var(--ink);font-family:var(--sans);line-height:1.55;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   min-height:100vh;overflow-x:hidden;overflow-x:clip;
+  /* Sticky footer: .site grows to fill, so the footer is pushed to the
+     bottom of the page instead of stopping mid-screen on short pages.
+     Only .site and .footer are in normal flow (nav/hud/scenery are fixed
+     or absolute), so this lays out just those two. */
+  display:flex;flex-direction:column;
 }
 ::selection{background:var(--burn);color:#fff;}
 a{color:inherit;}
@@ -68,7 +73,7 @@ body::after{
 @media (prefers-reduced-motion:reduce){ body::after{animation:none;} }
 
 #stars{position:fixed;inset:0;z-index:0;pointer-events:none;display:block;}
-.site{position:relative;z-index:1;}
+.site{position:relative;z-index:1;flex:1 0 auto;}   /* grow to push footer down */
 
 .hud{position:fixed;inset:0;z-index:80;pointer-events:none;font-family:var(--mono);}
 .hud-corner{position:fixed;width:22px;height:22px;border:1px solid var(--line-2);opacity:0.9;}
@@ -466,7 +471,7 @@ html.pt-enter.pt-leave .site{
   transition:transform 480ms var(--ease),opacity 380ms ease;}
 .modal-overlay.open .modal-project,.modal-overlay.open .modal-doc{transform:none;opacity:1;}
 
-.footer{border-top:1px solid var(--line);padding:26px var(--gutter);position:relative;z-index:2;
+.footer{border-top:1px solid var(--line);padding:26px var(--gutter);position:relative;z-index:2;flex:0 0 auto;
   display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;
   font-family:var(--mono);font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--faint);
   background:color-mix(in srgb,var(--void) 70%,transparent);}

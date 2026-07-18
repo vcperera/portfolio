@@ -1263,7 +1263,7 @@
 
     var vw = innerWidth, vh = innerHeight;
     var mobile = vw < 700;
-    var docH = Math.max(document.documentElement.scrollHeight, vh * 2);
+    var docH = Math.max(document.documentElement.scrollHeight, vh);
     builtDocH = docH;
     host.style.height = docH + "px";
 
@@ -1435,7 +1435,7 @@
     rebuildT = setTimeout(function () {
       var prev = host.style.height;
       host.style.height = "0px";
-      var docH = Math.max(document.documentElement.scrollHeight, innerHeight * 2);
+      var docH = Math.max(document.documentElement.scrollHeight, innerHeight);
       host.style.height = prev;
       if (!force && Math.abs(docH - builtDocH) < 40 && innerWidth === VW) return;
       buildBackdrop();
