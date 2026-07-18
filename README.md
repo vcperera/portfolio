@@ -58,7 +58,7 @@ Notes on a few columns:
 | Institution crests (education) | `assets/logos/education/` |
 | Tech-stack logos | `assets/logos/techstack/` |
 | Personas / memoji | `assets/memoji/` |
-| Certificate files / thumbs | `certifications/pdfs/`, `certifications/thumbs/` |
+| Certificate files / thumbs | `accolades/pdfs/`, `accolades/thumbs/` |
 | Featured thumbs | `featured/thumbs/` |
 | Project images | `projects/Project <N>/` |
 
@@ -67,8 +67,8 @@ Notes on a few columns:
 - **New organisation:** drop the logo in `assets/logos/organisations/`, then add a
   row to the `organisations` sheet (fill `Image` with the filename and write a
   `Back_Description`).
-- **New certificate:** add the PDF to `certifications/pdfs/` and a `.webp` thumb to
-  `certifications/thumbs/`, then add a row to the `certificates` sheet.
+- **New certificate:** add the PDF to `accolades/pdfs/` and a `.webp` thumb to
+  `accolades/thumbs/`, then add a row to the `certificates` sheet.
 - **New tool:** drop the logo in `assets/logos/techstack/` and add a row to the
   `techstack` sheet (reuse an existing `Category` / `Sub-Category` to slot it into a
   group).
@@ -90,7 +90,7 @@ Notes on a few columns:
 │   ├── space-bg.js, star-avatar.js, vish-avatar.js, mission.js
 │   ├── logos/            organisations/ · education/ · techstack/
 │   ├── me/  memoji/      portraits and personas
-├── certifications/       Accolades page (index.html) + pdfs/ + thumbs/
+├── accolades/       Accolades page (index.html) + pdfs/ + thumbs/
 ├── featured/             Featured page (index.html, featured.js) + thumbs/
 └── projects/             Projects page (index.html, projects.js) + Project <N>/ folders
 ```

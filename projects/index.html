@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/mission.css">
+<link rel="stylesheet" href="/assets/mission.css">
 <style>
 
 .modal-project{width:92vw;max-width:1440px;height:85vh;max-height:920px;display:flex;overflow:hidden;
@@ -69,17 +69,17 @@
 <div class="pt" aria-hidden="true"><span class="pt-mark">Loading</span></div>
 
 <header class="nav">
-  <a class="nav-brand" href="../index.html" aria-label="Home">
+  <a class="nav-brand" href="/" aria-label="Home">
     <span class="sig"></span>
     <span class="nb-txt">
       <span class="nb-name"><i>VC</i><span class="nb-dot">.</span>Perera</span>
     </span>
   </a>
   <nav class="nav-links" aria-label="Primary">
-    <a href="index.html" class="active" data-scramble><span class="idx">01</span>PROJECTS</a>
-    <a href="../certifications/index.html" data-scramble><span class="idx">02</span>ACCOLADES</a>
-    <a href="../featured/index.html" data-scramble><span class="idx">03</span>FEATURED</a>
-    <a href="../index.html#comms" data-scramble><span class="idx">04</span>COMMS</a>
+    <a href="/projects" class="active" data-scramble><span class="idx">01</span>PROJECTS</a>
+    <a href="/accolades" data-scramble><span class="idx">02</span>ACCOLADES</a>
+    <a href="/featured" data-scramble><span class="idx">03</span>FEATURED</a>
+    <a href="/#comms" data-scramble><span class="idx">04</span>COMMS</a>
   </nav>
   <span class="nav-spacer"></span>
   <div class="nav-tail">
@@ -87,11 +87,11 @@
   </div>
 </header>
 <nav class="mmenu" aria-label="Mobile">
-  <a href="../index.html"><span class="idx">00</span>Home</a>
-  <a href="index.html"><span class="idx">01</span>Projects</a>
-  <a href="../certifications/index.html"><span class="idx">02</span>Accolades</a>
-  <a href="../featured/index.html"><span class="idx">03</span>Featured</a>
-  <a href="../index.html#comms"><span class="idx">04</span>Comms</a>
+  <a href="/"><span class="idx">00</span>Home</a>
+  <a href="/projects"><span class="idx">01</span>Projects</a>
+  <a href="/accolades"><span class="idx">02</span>Accolades</a>
+  <a href="/featured"><span class="idx">03</span>Featured</a>
+  <a href="/#comms"><span class="idx">04</span>Comms</a>
   <div class="mmeta">VC.PERERA // MISSION CONTROL // 2026</div>
 </nav>
 
@@ -157,10 +157,10 @@
   .pt{display:none !important;} .sp-i{transform:none !important;}
 </style></noscript>
 
-<script src="../assets/mission.js"></script>
+<script src="/assets/mission.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="../assets/data.js" data-workbook="../fetch.xlsx"></script>
-<script src="projects.js?v=3"></script>
+<script src="/assets/data.js" data-workbook="/fetch.xlsx"></script>
+<script src="/projects/projects.js?v=3"></script>
 <script>
 
 (function(){
@@ -192,7 +192,7 @@
 })();
 document.getElementById("yr").textContent=new Date().getFullYear();
 </script>
-<script src="../assets/space-bg.js" defer></script>
+<script src="/assets/space-bg.js" defer></script>
 <script>
 
 (function fixScrambleCompletion() {

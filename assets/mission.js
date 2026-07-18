@@ -1,3 +1,19 @@
+/* ---------------------------------------------- analytics (GoatCounter) --
+   Defined here because mission.js is the one file every page loads, so
+   views are recorded sitewide and the header counters read the same
+   source. initStats() below reads window.GC_CODE.
+   Note: localhost is deliberately NOT counted, so local previews via
+   serve.bat never pollute the real numbers.                              */
+window.GC_CODE = "vcperera";
+(function loadGoatCounter(){
+  if(!window.GC_CODE) return;
+  var s=document.createElement("script");
+  s.async=true;
+  s.src="//gc.zgo.at/count.js";
+  s.setAttribute("data-goatcounter","https://"+window.GC_CODE+".goatcounter.com/count");
+  (document.head||document.documentElement).appendChild(s);
+})();
+
 
 (function(){
 "use strict";

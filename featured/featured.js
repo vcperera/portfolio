@@ -6,6 +6,11 @@ const IMG_VERSION = 4;
 let POSTS = [];
 let activeTag = "all";
 
+// Absolute-path helper: pages are served at /featured (no trailing slash),
+// so relative asset paths would resolve against the site root and 404.
+const ASSET = p => (!p || /^(https?:)?\/\//.test(p) || p.charAt(0)==="/") ? p : "/featured/" + p.replace(/^\.\//,"");
+
+
 function parseTags(raw){
   return String(raw||"")
     .split(/[,\s]+/)
@@ -32,7 +37,7 @@ POSTS = rows.map(r=>{
     title:(r[iTitle]||"").trim(),
     desc:(r[iDesc]||"").trim(),
 
-    thumb:(r[iThumb]||"").trim() || `thumbs/${(r[iId]||"").trim()}.webp`,
+    thumb:ASSET((r[iThumb]||"").trim() || `thumbs/${(r[iId]||"").trim()}.webp`),
     link:(r[iLink]||"").trim(),
     tags:parseTags(r[iTags]),
     scaleThumb: scaleThumb

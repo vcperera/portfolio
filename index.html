@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/mission.css">
+<link rel="stylesheet" href="/assets/mission.css">
 <style>
 
 #boot{position:fixed;inset:0;z-index:9997;background:var(--void-2);
@@ -846,16 +846,16 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
 
 
 <header class="nav">
-  <a class="nav-brand" href="index.html" aria-label="Home">
+  <a class="nav-brand" href="/" aria-label="Home">
     <span class="sig"></span>
     <span class="nb-txt">
       <span class="nb-name"><i>VC</i><span class="nb-dot">.</span>Perera</span>
     </span>
   </a>
   <nav class="nav-links" aria-label="Primary">
-    <a href="projects/index.html" data-scramble><span class="idx">01</span>PROJECTS</a>
-    <a href="certifications/index.html" data-scramble><span class="idx">02</span>ACCOLADES</a>
-    <a href="featured/index.html" data-scramble><span class="idx">03</span>FEATURED</a>
+    <a href="/projects" data-scramble><span class="idx">01</span>PROJECTS</a>
+    <a href="/accolades" data-scramble><span class="idx">02</span>ACCOLADES</a>
+    <a href="/featured" data-scramble><span class="idx">03</span>FEATURED</a>
     <a href="#comms" data-scramble><span class="idx">04</span>COMMS</a>
   </nav>
   <span class="nav-spacer"></span>
@@ -874,9 +874,9 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
   </div>
 </header>
 <nav class="mmenu" aria-label="Mobile">
-  <a href="projects/index.html"><span class="idx">01</span>Projects</a>
-  <a href="certifications/index.html"><span class="idx">02</span>Accolades</a>
-  <a href="featured/index.html"><span class="idx">03</span>Featured</a>
+  <a href="/projects"><span class="idx">01</span>Projects</a>
+  <a href="/accolades"><span class="idx">02</span>Accolades</a>
+  <a href="/featured"><span class="idx">03</span>Featured</a>
   <a href="#comms"><span class="idx">04</span>Comms</a>
   <div class="mmeta">VC.PERERA // MISSION CONTROL // 2026</div>
 </nav>
@@ -895,7 +895,7 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
   <div class="hero-grid">
     <div class="hero-text">
       <div class="callsign hi" style="--hd:80ms">
-        <span class="cs-img"><img id="persona-img" src="assets/memoji/AerospaceEngineer.webp" alt="" width="32" height="32"></span>
+        <span class="cs-img"><img id="persona-img" src="/assets/memoji/AerospaceEngineer.webp" alt="" width="32" height="32"></span>
         <span class="cs-txt">
           <span class="cs-k">CALLSIGN</span>
           <span class="cs-v" id="persona-tag">AEROSPACE ENGINEER</span>
@@ -909,11 +909,11 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
       </h1>
       <p class="h-sub hi" style="--hd:560ms">Hello World! My name is Vishal.<br>And this is my Digital Portfolio.</p>
       <div class="h-cta hi" style="--hd:700ms">
-        <a class="mbtn solid" href="projects/index.html" data-magnetic="0.25">
+        <a class="mbtn solid" href="/projects" data-magnetic="0.25">
           VIEW MISSIONS
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
         </a>
-        <a class="mbtn" href="certifications/index.html" data-magnetic="0.25">
+        <a class="mbtn" href="/accolades" data-magnetic="0.25">
           ACCOLADES
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><path d="M12 3 4 7v5c0 4.5 3.4 7.7 8 9 4.6-1.3 8-4.5 8-9V7l-8-4Z"/></svg>
         </a>
@@ -1081,7 +1081,7 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
     </div>
     <div class="edu-head-row">
       <h2 class="sec-title edu-title" data-split="words" data-reveal>EDUCATION</h2>
-      <a class="edu-certs-btn" href="certifications/index.html" data-magnetic="0.2" aria-label="View all certificates">
+      <a class="edu-certs-btn" href="/accolades" data-magnetic="0.2" aria-label="View all certificates">
         <span>View Certificates</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
       </a>
@@ -1108,7 +1108,7 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
   <div style="height:clamp(120px,18vh,220px);"></div>
   <div class="c-peek" id="c-peek" data-reveal="fade" title="Hi!">
     <span class="bubble">Compiling, BRB…!</span>
-    <img src="assets/memoji/Vish.webp" alt="Vishal peeking over a laptop" loading="lazy">
+    <img src="/assets/memoji/Vish.webp" alt="Vishal peeking over a laptop" loading="lazy">
   </div>
 </section>
 </div>
@@ -1124,18 +1124,16 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
 </style></noscript>
 
 <script>var GC_CODE="vcperera";</script>
-<script src="assets/mission.js"></script>
+<script src="/assets/mission.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="assets/data.js" data-workbook="fetch.xlsx"></script>
-<script src="home.js"></script>
+<script src="/assets/data.js" data-workbook="/fetch.xlsx"></script>
+<script src="/home.js"></script>
 
-<script src="assets/space-bg.js" defer></script>
-<script src="assets/star-avatar.js" defer></script>
+<script src="/assets/space-bg.js" defer></script>
+<script src="/assets/star-avatar.js" defer></script>
 <script>document.getElementById("yr").textContent=new Date().getFullYear();</script>
 
-<script data-goatcounter="https://vcperera.goatcounter.com/count"
-        data-goatcounter-settings='{"allow_local":true}'
-        async src="//gc.zgo.at/count.js"></script>
+<!-- Analytics is loaded centrally from assets/mission.js (all pages) -->
 
 <script>
 

@@ -5,6 +5,11 @@ const IMG_VERSION = 2;
 let PROJECTS = [];
 let activeTag = "all";
 
+// Absolute-path helper: pages are served at /projects (no trailing slash),
+// so relative asset paths would resolve against the site root and 404.
+const ASSET = p => (!p || /^(https?:)?\/\//.test(p) || p.charAt(0)==="/") ? p : "/projects/" + p.replace(/^\.\//,"");
+
+
 function parseTags(raw){
   return String(raw||"")
     .split(/[,\s]+/)
@@ -35,9 +40,9 @@ async function loadProjects(){
     const title = (r[iTitle] || "").trim();
     if(!id || !title) return null;
 
-    const thumb=(r[iThumb]||"").trim();
+    const thumb=ASSET((r[iThumb]||"").trim());
     const mediaRaw=(r[iMedia]||"").trim();
-    const media = mediaRaw ? mediaRaw.split("|").map(s=>s.trim()).filter(Boolean) : [];
+    const media = mediaRaw ? mediaRaw.split("|").map(s=>ASSET(s.trim())).filter(Boolean) : [];
     const explanation=(r[iExpl]||"").trim();
     const scaleThumb = (r[iScaleThumb] || "YES").trim();
     return {

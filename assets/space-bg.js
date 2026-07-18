@@ -44,7 +44,7 @@
   var P = location.pathname.toLowerCase();
   var PAGE = P.indexOf("featured") > -1 ? "featured"
            : P.indexOf("projects") > -1 ? "projects"
-           : P.indexOf("certifications") > -1 ? "certs" : "home";
+           : P.indexOf("accolades") > -1 ? "certs" : "home";
 
   /* Each page: its own seed, nebula palette, phenomena lineup, horizon
      atmosphere and landscape at ALT 0%. Same universe, different world.   */

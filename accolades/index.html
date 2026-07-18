@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/mission.css">
+<link rel="stylesheet" href="/assets/mission.css">
 <style>
 
 #m-docwrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
@@ -56,17 +56,17 @@
 <div class="pt" aria-hidden="true"><span class="pt-mark">Loading</span></div>
 
 <header class="nav">
-  <a class="nav-brand" href="../index.html" aria-label="Home">
+  <a class="nav-brand" href="/" aria-label="Home">
     <span class="sig"></span>
     <span class="nb-txt">
       <span class="nb-name"><i>VC</i><span class="nb-dot">.</span>Perera</span>
     </span>
   </a>
   <nav class="nav-links" aria-label="Primary">
-    <a href="../projects/index.html" data-scramble><span class="idx">01</span>PROJECTS</a>
-    <a href="index.html" class="active" data-scramble><span class="idx">02</span>ACCOLADES</a>
-    <a href="../featured/index.html" data-scramble><span class="idx">03</span>FEATURED</a>
-    <a href="../index.html#comms" data-scramble><span class="idx">04</span>COMMS</a>
+    <a href="/projects" data-scramble><span class="idx">01</span>PROJECTS</a>
+    <a href="/accolades" class="active" data-scramble><span class="idx">02</span>ACCOLADES</a>
+    <a href="/featured" data-scramble><span class="idx">03</span>FEATURED</a>
+    <a href="/#comms" data-scramble><span class="idx">04</span>COMMS</a>
   </nav>
   <span class="nav-spacer"></span>
   <div class="nav-tail">
@@ -74,11 +74,11 @@
   </div>
 </header>
 <nav class="mmenu" aria-label="Mobile">
-  <a href="../index.html"><span class="idx">00</span>Home</a>
-  <a href="../projects/index.html"><span class="idx">01</span>Projects</a>
-  <a href="index.html"><span class="idx">02</span>Accolades</a>
-  <a href="../featured/index.html"><span class="idx">03</span>Featured</a>
-  <a href="../index.html#comms"><span class="idx">04</span>Comms</a>
+  <a href="/"><span class="idx">00</span>Home</a>
+  <a href="/projects"><span class="idx">01</span>Projects</a>
+  <a href="/accolades"><span class="idx">02</span>Accolades</a>
+  <a href="/featured"><span class="idx">03</span>Featured</a>
+  <a href="/#comms"><span class="idx">04</span>Comms</a>
   <div class="mmeta">VC.PERERA // MISSION CONTROL // 2026</div>
 </nav>
 
@@ -146,9 +146,9 @@
   .pt{display:none !important;} .sp-i{transform:none !important;}
 </style></noscript>
 
-<script src="../assets/mission.js"></script>
+<script src="/assets/mission.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="../assets/data.js" data-workbook="../fetch.xlsx"></script>
+<script src="/assets/data.js" data-workbook="/fetch.xlsx"></script>
 <script>
 
 let CERTIFICATES = [];
@@ -186,6 +186,7 @@ async function loadCertificates(){
   const totals={};
   rows.forEach(r=>{ const s=(r[iSeries]||"").trim(); if(s) totals[s]=(totals[s]||0)+1; });
 
+  const ASSET = p => (!p || /^(https?:)?\/\//.test(p) || p.charAt(0)==="/") ? p : "/accolades/" + p.replace(/^\.\//,"");
   CERTIFICATES = rows.map(r=>{
   const series=(r[iSeries]||"").trim();
   const order=parseInt(r[iOrder],10);
@@ -199,8 +200,8 @@ async function loadCertificates(){
     subjects: subj.split(",").map(s=>s.trim()).filter(Boolean),
     verifyUrl: (r[iVerify]||"").trim() || "#",
 
-    thumb: (r[iThumb]||"").trim() || `thumbs/${(r[iId]||"").trim()}.webp`,
-    fileUrl: (r[iCert]||"").trim() || `pdfs/${(r[iId]||"").trim()}.pdf`,
+    thumb: ASSET((r[iThumb]||"").trim() || `thumbs/${(r[iId]||"").trim()}.webp`),
+    fileUrl: ASSET((r[iCert]||"").trim() || `pdfs/${(r[iId]||"").trim()}.pdf`),
     type: series ? "Multi-Certificate Course" : "Standalone",
     series: series,
     seriesOrder: isNaN(order)?0:order,
@@ -392,7 +393,7 @@ function cardHTML(c,idx){
     ? `href="${attr(c.verifyUrl)}" target="_blank" rel="noopener"`
     : `href="#" aria-disabled="true" title="Verification link to be added"`;
   const THUMB_VERSION = 2;
-  const thumbSrc = (c.thumb ? attr(c.thumb) : `thumbs/${slugify(c.title)}.webp`) + "?v=" + THUMB_VERSION;
+  const thumbSrc = (c.thumb ? attr(c.thumb) : `/accolades/thumbs/${slugify(c.title)}.webp`) + "?v=" + THUMB_VERSION;
   const objectFit = c.scaleThumb === "NO" ? "contain" : "cover";
   return `
   <article class="card" data-idx="${idx}">
@@ -574,7 +575,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal.classList.con
 })();
 document.getElementById("yr").textContent=new Date().getFullYear();
 </script>
-<script src="../assets/space-bg.js" defer></script>
+<script src="/assets/space-bg.js" defer></script>
 <script>
 
 (function fixScrambleCompletion() {
