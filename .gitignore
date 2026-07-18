@@ -9,3 +9,7 @@ desktop.ini
 .idea/
 __pycache__/
 *.pyc
+
+# --- Local-only dev tooling (never deploy; Vercel doesn't need these) ---
+serve.bat
+tools/
