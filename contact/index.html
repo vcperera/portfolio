@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact - VC.Perera</title>
+<meta name="description" content="Get in touch with Vishal C. Perera — collaborations, opportunities, tutoring and enquiries." />
+<meta name="theme-color" content="#05060a" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305060a'/%3E%3Ctext x='26' y='44' font-family='Space Grotesk,Segoe UI,Arial,sans-serif' font-size='30' font-weight='700' font-style='italic' fill='%23eef2fa' text-anchor='middle'%3EVC%3C/text%3E%3Ccircle cx='48' cy='44' r='4.6' fill='%236ea8ff'/%3E%3C/svg%3E" />
+<script>(function(){try{if(sessionStorage.getItem("ptNav")==="1"){sessionStorage.removeItem("ptNav");document.documentElement.classList.add("pt-enter");}}catch(e){}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/mission.css">
+<style>
+.nb-name i{font-style:italic;letter-spacing:0.01em;}
+.nb-dot{color:var(--signal);}
+.nav-clock{display:none !important;}
+
+/* ---------------------------------------------------------- contact form */
+.cf-single{padding-bottom:clamp(60px,10vh,120px);}
+
+.cf-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:clamp(20px,3vw,36px);
+}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:620px){ .cf-row{grid-template-columns:1fr;} }
+
+.cf-field{display:flex;flex-direction:column;gap:7px;margin-bottom:18px;}
+.cf-field label{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim);display:flex;align-items:center;gap:6px;
+}
+.cf-field label .req{color:var(--burn);}
+.cf-field .opt{color:var(--faint);text-transform:none;letter-spacing:.04em;font-size:9.5px;}
+
+.cf-field input,.cf-field textarea,.cf-field select{
+  width:100%;background:var(--void-2);color:var(--ink);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 13px;font-family:var(--sans);font-size:14px;line-height:1.5;
+  transition:border-color 220ms var(--ease),box-shadow 220ms var(--ease),background 220ms var(--ease);
+}
+.cf-field textarea{resize:vertical;min-height:132px;}
+.cf-field input:focus,.cf-field textarea:focus,.cf-field select:focus{
+  outline:none;border-color:var(--signal);background:var(--panel-2);
+  box-shadow:0 0 0 3px var(--signal-soft);
+}
+.cf-field input::placeholder,.cf-field textarea::placeholder{color:var(--faint);}
+
+.cf-field.invalid input,.cf-field.invalid textarea,.cf-field.invalid select{
+  border-color:var(--burn);box-shadow:0 0 0 3px var(--burn-soft);
+}
+.cf-err{
+  font-family:var(--mono);font-size:10.5px;color:var(--burn);
+  min-height:0;opacity:0;transform:translateY(-3px);
+  transition:opacity 200ms var(--ease),transform 200ms var(--ease);
+}
+.cf-field.invalid .cf-err{opacity:1;transform:none;}
+
+/* honeypot - hidden from humans, tempting to bots */
+.cf-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+
+.cf-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px;}
+.cf-submit{
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  background:var(--signal);color:var(--void);border:1px solid var(--signal);
+  border-radius:var(--radius);padding:13px 26px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:9px;
+  transition:background 260ms var(--ease),color 260ms var(--ease),border-color 260ms var(--ease);
+}
+.cf-submit:hover:not(:disabled){background:var(--burn);border-color:var(--burn);color:#fff;}
+.cf-submit:disabled{opacity:.55;cursor:not-allowed;}
+.cf-submit .spin{
+  width:13px;height:13px;border:2px solid rgba(5,6,10,.3);border-top-color:var(--void);
+  border-radius:50%;animation:cfspin .7s linear infinite;display:none;
+}
+.cf-submit.busy .spin{display:block;}
+@keyframes cfspin{to{transform:rotate(360deg);}}
+
+
+.cf-alert{
+  border-radius:var(--radius);padding:14px 16px;margin-bottom:20px;display:none;
+  font-size:13.5px;line-height:1.55;border:1px solid;
+}
+.cf-alert.show{display:block;}
+.cf-alert.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ink);}
+.cf-alert.bad{background:var(--burn-soft);border-color:var(--burn);color:var(--ink);}
+.cf-alert b{color:var(--ink);}
+
+/* ------------------------------------------------- small LinkedIn button */
+.cf-linkedin{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);text-decoration:none;
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 18px;
+  transition:color 240ms var(--ease),border-color 240ms var(--ease),background 240ms var(--ease);
+}
+.cf-linkedin:hover{color:var(--ink);border-color:var(--signal);background:var(--signal-soft);}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="pt" aria-hidden="true"><span class="pt-mark">Loading</span></div>
+
+<header class="nav">
+  <a class="nav-brand" href="/" aria-label="Home">
+    <span class="sig"></span>
+    <span class="nb-txt">
+      <span class="nb-name"><i>VC</i><span class="nb-dot">.</span>Perera</span>
+    </span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="/projects" data-scramble><span class="idx">01</span>PROJECTS</a>
+    <a href="/accolades" data-scramble><span class="idx">02</span>ACCOLADES</a>
+    <a href="/featured" data-scramble><span class="idx">03</span>FEATURED</a>
+    <a href="/contact" class="active" data-scramble><span class="idx">04</span>CONTACT</a>
+  </nav>
+  <span class="nav-spacer"></span>
+  <div class="nav-tail">
+    <button class="nav-burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mmenu" aria-label="Mobile">
+  <a href="/"><span class="idx">00</span>Home</a>
+  <a href="/projects"><span class="idx">01</span>Projects</a>
+  <a href="/accolades"><span class="idx">02</span>Accolades</a>
+  <a href="/featured"><span class="idx">03</span>Featured</a>
+  <a href="/contact"><span class="idx">04</span>Contact</a>
+  <div class="mmeta">VC.PERERA // MISSION CONTROL // 2026</div>
+</nav>
+
+<div class="hud" aria-hidden="true">
+  <span class="hud-corner tl"></span><span class="hud-corner tr"></span>
+  <span class="hud-corner bl"></span><span class="hud-corner br"></span>
+  <span class="hud-alt" data-alt>ALT <b>000%</b></span>
+  <span class="hud-sys"><span class="blip"></span>ALL SYSTEMS NOMINAL</span>
+</div>
+
+<div class="site">
+<section class="page-hero">
+  <div class="ph-kicker" data-reveal="fade">
+    <span class="tick"></span>
+    <span class="mlabel">OPEN CHANNEL · RESPONSE WITHIN 48H</span>
+  </div>
+  <h1><span data-split="chars" data-split-step="20">GOT A</span> <span class="ghost" data-split="chars" data-split-step="20" data-split-delay="240">MISSION?</span></h1>
+</section>
+
+<div class="page-wrap">
+  <div class="cf-single">
+    <div class="cf-card">
+      <div class="cf-alert ok"   id="cf-ok"   role="status" aria-live="polite"></div>
+      <div class="cf-alert bad"  id="cf-bad"  role="alert"  aria-live="assertive"></div>
+
+      <form id="cf-form" novalidate>
+        <div class="cf-row">
+          <div class="cf-field" id="f-name">
+            <label for="in-name">Name <span class="req">*</span></label>
+            <input id="in-name" name="name" type="text" autocomplete="name" placeholder="Your full name" required>
+            <span class="cf-err"></span>
+          </div>
+          <div class="cf-field" id="f-email">
+            <label for="in-email">Contact Email <span class="req">*</span></label>
+            <input id="in-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            <span class="cf-err"></span>
+          </div>
+        </div>
+
+        <div class="cf-row">
+          <div class="cf-field" id="f-phone">
+            <label for="in-phone">Contact Number <span class="opt">(optional)</span></label>
+            <input id="in-phone" name="phone" type="tel" autocomplete="tel" placeholder="+94 7X XXX XXXX">
+            <span class="cf-err"></span>
+          </div>
+          <div class="cf-field" id="f-topic">
+            <label for="in-topic">Topic</label>
+            <select id="in-topic" name="topic">
+              <option>General Inquiry</option>
+              <option>Collaboration / Partnership</option>
+              <option>Tutoring</option>
+              <option>Opportunity / Hiring</option>
+              <option>Other</option>
+            </select>
+            <span class="cf-err"></span>
+          </div>
+        </div>
+
+        <div class="cf-field" id="f-subject">
+          <label for="in-subject">Subject <span class="req">*</span></label>
+          <input id="in-subject" name="subject" type="text" placeholder="One line on what this is about" required>
+          <span class="cf-err"></span>
+        </div>
+
+        <div class="cf-field" id="f-message">
+          <label for="in-message">Description <span class="req">*</span></label>
+          <textarea id="in-message" name="message" placeholder="Tell me a bit more — context, timelines, what you need." required></textarea>
+          <span class="cf-err"></span>
+        </div>
+
+        <!-- bot trap: hidden from people, so anything filled in here is spam -->
+        <div class="cf-hp" aria-hidden="true">
+          <label for="in-company">Company</label>
+          <input id="in-company" name="company" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="cf-actions">
+          <button class="cf-submit" type="submit" id="cf-send">
+            <span class="spin" aria-hidden="true"></span>
+            <span class="cf-send-txt">Transmit</span>
+          </button>
+          <a class="cf-linkedin" href="https://www.linkedin.com/in/vc-perera/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </form>
+    </div>
+
+
+
+  </div>
+</div>
+</div>
+
+<footer class="footer">
+  <span>&copy; <span id="yr"></span> VC.PERERA</span>
+</footer>
+
+<noscript><style>
+  [data-reveal]{opacity:1 !important;transform:none !important;filter:none !important;}
+  .pt{display:none !important;} .sp-i{transform:none !important;}
+</style></noscript>
+
+<script src="/assets/mission.js"></script>
+<script src="/assets/space-bg.js" defer></script>
+<script>document.getElementById("yr").textContent=new Date().getFullYear();</script>
+
+<script>
+/* =====================================================================
+   CONTACT FORM  -  submissions are emailed via Web3Forms.
+   ---------------------------------------------------------------------
+   accessKey MUST be set, otherwise Web3Forms rejects every submission
+   and visitors get the error state. Get a key (no account needed) at
+   https://web3forms.com - it is emailed to you.
+   ===================================================================== */
+const CONTACT_CONFIG = {
+  endpoint:  "https://api.web3forms.com/submit",
+  provider:  "web3forms",
+  accessKey: "665776b8-58d2-40a5-8d49-13a8ca107bfd",
+  subjectPrefix: "[Portfolio] "
+};
+
+(function(){
+  const form = document.getElementById("cf-form");
+  const btn  = document.getElementById("cf-send");
+  const okBox= document.getElementById("cf-ok");
+  const badBox=document.getElementById("cf-bad");
+
+  const RULES = {
+    name:    v => v.trim().length >= 2            || "Please enter your name.",
+    email:   v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || "Enter a valid email address.",
+    subject: v => v.trim().length >= 3            || "Give your message a subject.",
+    message: v => v.trim().length >= 10           || "Please add a little more detail (10+ characters).",
+    phone:   v => v.trim()===""  || /^[+()\-\s\d]{6,}$/.test(v.trim()) || "That doesn't look like a valid number."
+  };
+
+  function fieldOf(name){ return document.getElementById("f-"+name); }
+
+  function setError(name,msg){
+    const f = fieldOf(name); if(!f) return;
+    const el = f.querySelector(".cf-err");
+    if(msg){ f.classList.add("invalid"); el.textContent = msg;
+             f.querySelector("input,textarea").setAttribute("aria-invalid","true"); }
+    else   { f.classList.remove("invalid"); el.textContent = "";
+             const c=f.querySelector("input,textarea"); if(c) c.removeAttribute("aria-invalid"); }
+  }
+
+  function validate(){
+    let firstBad = null;
+    for(const key in RULES){
+      const input = form.elements[key]; if(!input) continue;
+      const res = RULES[key](input.value);
+      if(res !== true){ setError(key,res); if(!firstBad) firstBad = input; }
+      else setError(key,null);
+    }
+    return firstBad;
+  }
+
+  // clear a field's error as soon as the user fixes it
+  Object.keys(RULES).forEach(key=>{
+    const input = form.elements[key]; if(!input) return;
+    input.addEventListener("input", ()=>{
+      if(fieldOf(key).classList.contains("invalid") && RULES[key](input.value)===true) setError(key,null);
+    });
+  });
+
+  function busy(on){
+    btn.disabled = on;
+    btn.classList.toggle("busy", on);
+    btn.querySelector(".cf-send-txt").textContent = on ? "Transmitting…" : "Transmit";
+  }
+
+  form.addEventListener("submit", async e=>{
+    e.preventDefault();
+    okBox.classList.remove("show"); badBox.classList.remove("show");
+
+    // silent bot rejection
+    if(form.elements.company && form.elements.company.value.trim() !== ""){
+      okBox.textContent = "Thanks — your message has been sent.";
+      okBox.classList.add("show"); form.reset(); return;
+    }
+
+    const bad = validate();
+    if(bad){ bad.focus(); bad.scrollIntoView({block:"center",behavior:"smooth"}); return; }
+
+    const data = {
+      name:    form.elements.name.value.trim(),
+      email:   form.elements.email.value.trim(),
+      phone:   form.elements.phone.value.trim() || "—",
+      topic:   form.elements.topic.value,
+      subject: CONTACT_CONFIG.subjectPrefix + form.elements.subject.value.trim(),
+      message: form.elements.message.value.trim()
+    };
+
+    busy(true);
+    try{
+      const body = CONTACT_CONFIG.provider === "web3forms"
+        ? Object.assign({
+            access_key: CONTACT_CONFIG.accessKey,
+            from_name : data.name,
+            replyto   : data.email,   // hitting Reply in your inbox answers the sender
+            botcheck  : ""            // Web3Forms' own spam trap
+          }, data)
+        : data;
+
+      const res = await fetch(CONTACT_CONFIG.endpoint,{
+        method:"POST",
+        headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+        body: JSON.stringify(body)
+      });
+
+      if(res.ok){
+        form.reset();
+        okBox.innerHTML = "<b>Message sent.</b> Thanks for reaching out — I'll get back to you within 48 hours.";
+        okBox.classList.add("show");
+        okBox.scrollIntoView({block:"center",behavior:"smooth"});
+      }else{
+        throw new Error("HTTP "+res.status);
+      }
+    }catch(err){
+      badBox.innerHTML = "<b>That didn't go through.</b> Please try again, or reach me on " +
+                         "<a href='https://www.linkedin.com/in/vc-perera/' target='_blank' rel='noopener' style='color:var(--signal)'>LinkedIn</a>.";
+      badBox.classList.add("show");
+      console.error("[contact] submit failed:", err);
+    }finally{
+      busy(false);
+    }
+  });
+})();
+</script>
+
+<script>
+(function(){
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.querySelectorAll(".page-hero [data-split]").forEach(el=>el.classList.add("sp-run"));
+  }));
+})();
+</script>
+</body>
+</html>

@@ -92,7 +92,8 @@ Notes on a few columns:
 │   ├── me/  memoji/      portraits and personas
 ├── accolades/       Accolades page (index.html) + pdfs/ + thumbs/
 ├── featured/             Featured page (index.html, featured.js) + thumbs/
-└── projects/             Projects page (index.html, projects.js) + Project <N>/ folders
+├── projects/             Projects page (index.html, projects.js) + Project <N>/ folders
+└── contact/              Contact page (index.html) — form submits via Web3Forms
 ```
 
 ---
