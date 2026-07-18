@@ -423,8 +423,15 @@ function initStats(){
   const set=(el,v)=>{ if(el){ el.textContent=fmt(v); el.classList.remove("loading"); } };
   if(!code || code==="YOUR_CODE_HERE"){ if(viewsEl)viewsEl.textContent="—"; if(visEl)visEl.textContent="—"; return; }
   const base="https://"+code+".goatcounter.com/counter/";
-  fetch(base+"TOTAL.json").then(r=>r.json()).then(d=>set(viewsEl,d.count)).catch(()=>{});
-  fetch(base+"TOTAL.json?unique=1").then(r=>r.json()).then(d=>set(visEl,d.count)).catch(()=>{});
+  // One request returns BOTH totals: count = pageviews (every landing),
+  // count_unique = unique visitors. cache:"no-store" bypasses the browser's
+  // own HTTP cache so each load reflects GoatCounter's freshest value.
+  // (GoatCounter still caches this endpoint server-side for up to ~4h, so the
+  //  numbers can lag reality by that much - that ceiling can't be removed.)
+  fetch(base+"TOTAL.json", {cache:"no-store"})
+    .then(r=>r.json())
+    .then(d=>{ set(viewsEl, d.count); set(visEl, d.count_unique); })
+    .catch(()=>{});
 }
 
 function initTransitions(){
