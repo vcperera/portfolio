@@ -1,5 +1,8 @@
 
-const TOPICS = ["Aerospace", "Entrepreneurship", "Tech", "Economics", "Finance", "Wellbeing", "Cricket"];
+// Canonical spellings only. This list NO LONGER decides which tags appear -
+// the dropdown is built from the unique Tags actually present in the sheet.
+// It just normalises casing, so "aerospace" and "Aerospace" don't split in two.
+const TOPICS = ["Aerospace", "Entrepreneurship", "Tech", "Economics", "Finance", "Wellbeing", "Cricket", "Sports"];
 
 const IMG_VERSION = 4;
 
@@ -12,13 +15,14 @@ const ASSET = p => (!p || /^(https?:)?\/\//.test(p) || p.charAt(0)==="/") ? p : 
 
 
 function parseTags(raw){
+  // Split on COMMAS only, so multi-word tags like "Clean Energy" stay intact.
   return String(raw||"")
-    .split(/[,\s]+/)
+    .split(",")
     .map(t=>t.replace(/^#/,"").trim())
     .filter(Boolean)
     .map(t=>{
       const hit = TOPICS.find(x=>x.toLowerCase()===t.toLowerCase());
-      return hit || t;
+      return hit || t;   // normalise casing to the canonical spelling if known
     });
 }
 
@@ -55,7 +59,8 @@ function postMatches(p){ return activeTag==="all" || p.tags.includes(activeTag);
 
 function tagOptions(){
 
-  const present = TOPICS.filter(t=>POSTS.some(p=>p.tags.includes(t)));
+  // Unique tags straight from the sheet (Column F), same approach as projects.js
+  const present = [...new Set(POSTS.flatMap(p=>p.tags))].sort((a,b)=>a.localeCompare(b));
   return [{value:"all",label:"All",count:POSTS.length},
     ...present.map(t=>({value:t,label:"#"+t,count:POSTS.filter(p=>p.tags.includes(t)).length}))];
 }

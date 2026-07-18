@@ -11,8 +11,10 @@ const ASSET = p => (!p || /^(https?:)?\/\//.test(p) || p.charAt(0)==="/") ? p : 
 
 
 function parseTags(raw){
+  // Split on COMMAS only, so multi-word tags like "Clean Energy" stay intact.
+  // (Matches featured.js; the tag dropdown is built from unique sheet values.)
   return String(raw||"")
-    .split(/[,\s]+/)
+    .split(",")
     .map(t=>t.replace(/^#/,"").trim())
     .filter(Boolean);
 }
