@@ -1076,7 +1076,7 @@
   var far = document.createElement("canvas");
   far.id = "space-far";
   far.setAttribute("aria-hidden", "true");
-  far.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;" +
+  far.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100vh;" +
                       "z-index:-2;pointer-events:none;";
   var farG = far.getContext("2d");
   var FDPR = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -1250,7 +1250,10 @@
   host.id = "space-bg";
   host.setAttribute("aria-hidden", "true");
   host.style.cssText = "position:absolute;top:0;left:0;width:100%;" +
-                       "z-index:-1;pointer-events:none;overflow:visible;";
+                       // overflow-x:clip stops planet canvases that sit past the
+                       // right edge from widening the (mobile) layout viewport,
+                       // which otherwise made the page load slightly zoomed out.
+                       "z-index:-1;pointer-events:none;overflow-x:clip;overflow-y:visible;";
   var patches = [], landH = 0, builtDocH = 0;
 
   function buildDocLayer() {
