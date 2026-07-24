@@ -124,8 +124,10 @@ function initOrbit(){
     t.x=(e.clientX/innerWidth-0.5); t.y=(e.clientY/innerHeight-0.5);
   },{passive:true});
   M.ticker.add(()=>{
-    c.x=M.lerp(c.x,t.x,0.04); c.y=M.lerp(c.y,t.y,0.04);
-    wrap.style.transform=`translate(${(c.x*18).toFixed(1)}px,${(c.y*14).toFixed(1)}px) rotate(${(c.x*2).toFixed(2)}deg)`;
+    c.x=M.lerp(c.x,t.x,0.09); c.y=M.lerp(c.y,t.y,0.09);
+    // Gentle, tightly-bounded parallax so the avatar always rests in place
+    // instead of drifting far (and slowly) with the pointer.
+    wrap.style.transform=`translate(${(c.x*9).toFixed(1)}px,${(c.y*6).toFixed(1)}px) rotate(${(c.x*1.1).toFixed(2)}deg)`;
   });
 }
 

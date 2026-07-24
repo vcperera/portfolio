@@ -66,6 +66,20 @@
 .project-nav button:hover{color:var(--void);border-color:var(--signal);background:var(--signal);}
 .project-nav button svg{width:19px;height:19px;}
 
+/* Mobile: the floating arrows overlapped the description text, so dock them at
+   the very bottom of the card instead (revealed when you scroll to the end). */
+.detail-nav-mobile{display:none;}
+@media (max-width:900px){
+  .project-nav{display:none !important;}
+  .detail-nav-mobile{display:flex;justify-content:flex-end;gap:12px;flex:none;
+    padding:14px 22px 20px;background:var(--panel-2);border-top:1px solid var(--line);}
+  .detail-nav-mobile .dnm-btn{width:46px;height:46px;border-radius:50%;background:var(--panel-2);
+    border:1px solid var(--line-2);color:var(--dim);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:all 200ms ease;-webkit-tap-highlight-color:transparent;}
+  .detail-nav-mobile .dnm-btn:active{color:var(--void);border-color:var(--signal);background:var(--signal);}
+  .detail-nav-mobile .dnm-btn svg{width:19px;height:19px;}
+}
+
 /* 3 tidy lines at the smaller size (the shared .card-desc reserves a
    2-line box at 0.82rem, which left a half-visible third line). */
 .card-desc{font-size:0.656rem;height:calc(3 * 0.656rem * 1.5);-webkit-line-clamp:3;}

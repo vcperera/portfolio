@@ -242,7 +242,11 @@ function detailBodyHTML(p){
       <p class="detail-desc">${esc(p.desc)}</p>
       <div class="detail-tags">${tags}</div>
       <div class="detail-explanation">${paras}</div>
-    </div>`;
+    </div>${navigableProjects().length>1 ? `
+    <div class="detail-nav-mobile">
+      <button type="button" class="dnm-btn" data-nav="-1" aria-label="Previous project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button type="button" class="dnm-btn" data-nav="1" aria-label="Next project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>` : ""}`;
 }
 
 function setMediaIndex(i){
@@ -380,6 +384,10 @@ async function openDetail(id) {
   document.querySelectorAll("#media-strip .media-thumb").forEach(el => {
     el.addEventListener("click", () => setMediaIndex(parseInt(el.dataset.idx, 10)));
   });
+
+  // In-card prev/next (mobile) — docked at the bottom of the card.
+  body.querySelectorAll("[data-nav]").forEach(b =>
+    b.addEventListener("click", () => goToProjectOffset(parseInt(b.dataset.nav, 10))));
 
   const mediaMain = document.getElementById("media-main");
   if(mediaMain){
