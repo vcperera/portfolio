@@ -7,7 +7,13 @@
   var FALLBACK = "assets/memoji/star-source.png";
   var NAMES = ["neutral","hmm","stern","frown","down-glance",
                "side-look","grin","soft","eye-roll","wonder"];
-  var NF = 10, COLS = 5, ROWS = 2;
+  var COLS = 5, ROWS = 2;
+  /* The sheet is a 5x2 grid of 10 expression cells. Cell 0 ("1.webp") is
+     dropped — its face is zoomed noticeably larger than the rest. CELLS lists
+     the sheet cells we actually use; NF is that active count. To keep or drop a
+     different expression, just edit this array. */
+  var CELLS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  var NF = CELLS.length;
   var TARGET = 46000, ATH = 130, CONTRAST = 1.08;
   var OVERSIZE = 1.9;
   var DUR = 0.5;
@@ -54,7 +60,8 @@
 
     var det=[], maxA=new Float32Array(TW*TH), detAvg=new Float32Array(TW*TH);
     var nb=[[1,0],[-1,0],[0,1],[0,-1]], e,x,y,q;
-    for (e=0;e<NF;e++){
+    for (var sl=0;sl<NF;sl++){
+      e=CELLS[sl];
       var dm=new Float32Array(TW*TH);
       for (y=0;y<TH;y++) for (x=0;x<TW;x++){
         var a0=A(e,x,y); var id=y*TW+x; if(a0>maxA[id])maxA[id]=a0;
@@ -69,7 +76,7 @@
       }
       det.push(dm);
     }
-    for (var i2=0;i2<TW*TH;i2++){ var sd=0; for(e=0;e<NF;e++) sd+=det[e][i2]; detAvg[i2]=sd/NF; }
+    for (var i2=0;i2<TW*TH;i2++){ var sd=0; for(var sa=0;sa<NF;sa++) sd+=det[sa][i2]; detAvg[i2]=sd/NF; }
 
     var opaque=0; for(i2=0;i2<TW*TH;i2++) if(maxA[i2]>ATH) opaque++;
     var density=TARGET/Math.max(1,opaque), unit=2/TH;
@@ -93,7 +100,8 @@
     var POS=new Float32Array(pos), START=new Float32Array(startArr), RAND=new Float32Array(rnd);
 
     var ECOL=[],EAL=[],EDET=[];
-    for(e=0;e<NF;e++){
+    for(var sl3=0;sl3<NF;sl3++){
+      e=CELLS[sl3];
       var col=new Float32Array(P*3), al=new Float32Array(P), dd=new Float32Array(P);
       for(i2=0;i2<P;i2++){
         var xx=slotX[i2]|0, yy=slotY[i2]|0; if(xx<0)xx=0; if(yy<0)yy=0; if(xx>=TW)xx=TW-1; if(yy>=TH)yy=TH-1;
@@ -106,7 +114,7 @@
         col[i2*3]  = pr<0?0:pr>1?1:pr;
         col[i2*3+1]= pg<0?0:pg>1?1:pg;
         col[i2*3+2]= pb<0?0:pb>1?1:pb;
-        al[i2]=(A(e,xx,yy)>ATH)?1:0; dd[i2]=det[e][yy*TW+xx];
+        al[i2]=(A(e,xx,yy)>ATH)?1:0; dd[i2]=det[sl3][yy*TW+xx];
       }
       ECOL.push(col); EAL.push(al); EDET.push(dd);
     }
@@ -218,6 +226,26 @@
       host.addEventListener("touchend",function(){if(moved||performance.now()-tT>500)return;
         if(tapTimer){clearTimeout(tapTimer);tapTimer=null;enq(-1);}
         else{tapTimer=setTimeout(function(){tapTimer=null;enq(1);},250);}},{passive:true});
+
+      /* Scroll also cycles expressions: while the avatar is fully in view (not
+         clipped by the top or bottom of the window), that scroll band is split
+         into NF equal parts — scrolling across a part steps the expression, so
+         scrolling down and back up moves through them in equal increments. */
+      var lastSeg=-1, segTick=false;
+      function computeSeg(){
+        segTick=false;
+        var r=host.getBoundingClientRect(), h=r.height, vh=innerHeight;
+        if(h<=0 || h>=vh || r.top<0 || r.bottom>vh){ lastSeg=-1; return; }  // not fully visible
+        var span=vh-h, prog=span>0 ? (span-r.top)/span : 0;
+        prog=Math.max(0,Math.min(0.9999,prog));
+        var seg=Math.floor(prog*NF);
+        if(lastSeg===-1){ lastSeg=seg; return; }   // re-entered view: sync without a jump
+        if(seg!==lastSeg){ enq(seg-lastSeg); lastSeg=seg; }
+      }
+      // Throttle to one layout read per frame so scrolling stays buttery.
+      function segFromScroll(){ if(!segTick){ segTick=true; requestAnimationFrame(computeSeg); } }
+      addEventListener("scroll", segFromScroll, {passive:true});
+      addEventListener("resize", segFromScroll, {passive:true});
     }
 
     var uIntro=REDUCED?1:0, ready=REDUCED, t0=performance.now(), lastNow=0, running=false, raf=0, acc=0;
@@ -248,7 +276,7 @@
     start();
 
     window.VishStars={
-      count:P, names:NAMES,
+      count:P, names:CELLS.map(function(c){return NAMES[c];}),
       replay:function(){ uIntro=0; start(); },
       setGaze:function(){},
       setExpression:function(i){ var to=(((i|0)%NF)+NF)%NF; if(to===current&&!active)return; startTransition(current,to); },

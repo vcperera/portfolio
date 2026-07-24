@@ -4,7 +4,7 @@
 // It just normalises casing, so "aerospace" and "Aerospace" don't split in two.
 const TOPICS = ["Aerospace", "Entrepreneurship", "Tech", "Economics", "Finance", "Wellbeing", "Cricket", "Sports"];
 
-const IMG_VERSION = 4;
+const IMG_VERSION = 5;
 
 let POSTS = [];
 let activeTag = "all";

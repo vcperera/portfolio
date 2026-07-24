@@ -409,7 +409,7 @@ function cardHTML(c,idx){
   const verifyAttrs = (c.verifyUrl && c.verifyUrl!=="#")
     ? `href="${attr(c.verifyUrl)}" target="_blank" rel="noopener"`
     : `href="#" aria-disabled="true" title="Verification link to be added"`;
-  const THUMB_VERSION = 2;
+  const THUMB_VERSION = 3;
   const thumbSrc = (c.thumb ? attr(c.thumb) : `/accolades/thumbs/${slugify(c.title)}.webp`) + "?v=" + THUMB_VERSION;
   const objectFit = c.scaleThumb === "NO" ? "contain" : "cover";
   return `

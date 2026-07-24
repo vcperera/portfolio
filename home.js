@@ -193,7 +193,7 @@ function initProfile(){
     stage.innerHTML=PHOTOS.map((ph,i)=>{
       const c=CASCADE[i]||{l:(i%2)*46,t:Math.floor(i/2)*40,w:48,r:(i%2?4:-4),z:2+i};
       return '<div class="pol" style="left:'+c.l+'%;top:'+c.t+'%;width:'+c.w+'%;z-index:'+c.z+';--ar:'+ph.ar+';--rr:'+c.r+'deg;--mr:'+ph.rot+'deg;--i:'+i+'">'
-        +'<div class="frame"><img src="'+PF_DIR+ph.f+'" alt="" loading="lazy" decoding="async"></div></div>';
+        +'<div class="frame"><img src="'+PF_DIR+ph.f+'?v=2" alt="" loading="lazy" decoding="async"></div></div>';
     }).join("");
   }
   const pols=stage?qsa(".pol",stage):[];

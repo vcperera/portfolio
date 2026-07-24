@@ -43,8 +43,9 @@ Notes on a few columns:
   a sane range. In the card sheets (`certificates`, `featured`, `projects`) it
   is a thumbnail-fit flag — `NO` fits the whole image (CSS `contain`, nothing
   cropped) rather than filling the frame (`cover`); blank/`YES` fills.
-- **Media** (`projects`) is a `|`-separated ordered list of image paths for the
-  detail viewer. **Explanation** paragraphs are separated by a blank line.
+- **Media** (`projects`) is a `|`-separated ordered list of image paths (WebP or
+  JPG) for the detail viewer. **Explanation** paragraphs are separated by a blank
+  line.
 - **Series / Series_Order** (`certificates`) group multi-part courses together
   in the Accolades layout; `Subject` drives that page's subject filters.
 
@@ -77,8 +78,9 @@ named by **Title**, not ID, so its ordering is independent of any numbering sche
 | Personas / memoji | `assets/memoji/` | by `Image` filename |
 | Portrait rotator (hero) | `assets/me/web/` | `1.jpg` … `4.jpg` |
 | Certificate files / thumbs | `accolades/pdfs/`, `accolades/thumbs/` | by **Title** (e.g. `Claude 101.webp`) |
+| Certificate hi-res renders (mobile viewer) | `accolades/full/` | by **Title** — one `.webp` per PDF (e.g. `Claude 101.webp`) |
 | Featured thumbs | `featured/thumbs/` | by **ID** — `<ID>.webp` (e.g. `14.webp`) |
-| Project images | `projects/Project <ID>/` | `<ID>-<n>.webp` (e.g. `Project 7/7-1.webp`) |
+| Project images | `projects/Project <ID>/` | `<ID>-<n>.<ext>` — WebP or JPG (e.g. `Project 7/7-1.webp`, `Project 8/8-1.jpg`) |
 
 ### Adding new content — examples
 
@@ -92,13 +94,50 @@ named by **Title**, not ID, so its ordering is independent of any numbering sche
 - **New certificate:** add the PDF to `accolades/pdfs/` and a `.webp` thumb to
   `accolades/thumbs/`, both named after the certificate `Title`, then add a
   `certificates` row (set `Subject`, and `Series` / `Series_Order` if it is part of a
-  course). Row position follows the curated ID order, not recency.
+  course). Also add a high-resolution `.webp` render of the PDF to `accolades/full/`
+  (same `Title`) — mobile shows that in a pinch-zoom viewer since phones can't render
+  PDFs inline; if it is missing the viewer falls back to the thumbnail. Row position
+  follows the curated ID order, not recency.
 - **New organisation:** drop the logo in `assets/logos/organisations/`, then add a
   row to the `organisations` sheet (fill `Image` with the filename and write a
   `Back_Description`).
 - **New tool:** drop the logo in `assets/logos/techstack/` and add a row to the
   `techstack` sheet (reuse an existing `Category` / `Sub-Category` to slot it into a
   group).
+
+---
+
+## Media & performance conventions
+
+The site is tuned to load fast and animate smoothly, so keep new assets light:
+
+- **Thumbnails** (`accolades/thumbs/`, `featured/thumbs/`) should be **WebP,
+  ≈800 px on the longest side, quality ~80** — that renders sharp at grid size
+  while staying ~10–90 KB each. Avoid dropping in multi-megapixel exports; they
+  bloat the grid pages. Certificate hi-res renders in `accolades/full/` are ~2200 px
+  (they get zoomed on mobile); everything else should be down-sized to display size.
+- **Portrait rotator** images (`assets/me/web/`) display small — keep them
+  ≤~1200 px on the longest side.
+- **Cache-busting:** pages append a version token to image URLs so returning
+  visitors pick up replacements even when the filename is unchanged. If you
+  **replace an image in place** (same filename, new content), bump the matching
+  token: `THUMB_VERSION` in `accolades/index.html`, `IMG_VERSION` in
+  `featured/featured.js`, and the `?v=` on the portrait `<img>` in `home.js`.
+- Images use `loading="lazy"` / `decoding="async"`; scroll- and resize-driven
+  work is passive and batched to animation frames to keep scrolling fluid.
+
+## Interactive visuals
+
+- **Star avatar** (`assets/star-avatar.js`) renders the hero memoji as thousands
+  of WebGL points sampled from an expression sprite sheet
+  (`assets/memoji/track/star-expr.webp`, a 5×2 grid of cells). The `CELLS` array
+  lists which cells are used — edit it to add or drop an expression. On desktop,
+  circling the pointer cycles expressions; on mobile, **tap or scroll** does
+  (while the avatar is fully in view its scroll span is split into equal steps).
+- **Procedural backgrounds** (`assets/space-bg.js`) draw a different nebula
+  palette and a different ground scene at ALT 0% per page (`spires` on Home,
+  `mesa` on Featured, `ice` on Projects, `dunes` on Accolades). `assets/mission.js`
+  paints the shared starfield, shooting stars and the page-transition warp.
 
 ---
 
@@ -132,7 +171,7 @@ deliberately not counted, so local previews never inflate the numbers.
 │   ├── logos/            organisations/ · education/ · techstack/
 │   ├── memoji/           Persona / callsign images
 │   └── me/web/           Portrait rotator images
-├── accolades/            Accolades page (index.html) + pdfs/ + thumbs/   (files named by Title)
+├── accolades/            Accolades page (index.html) + pdfs/ + thumbs/ + full/   (files named by Title; full/ = hi-res renders for the mobile viewer)
 ├── featured/             Featured page (index.html, featured.js) + thumbs/   (files named by ID)
 ├── projects/             Projects page (index.html, projects.js) + Project <ID>/ folders (files named by ID)
 ├── contact/              Contact page (index.html) — form submits via Web3Forms
