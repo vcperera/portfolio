@@ -36,6 +36,12 @@
 
 .card .card-issuer{display:flex;align-items:center;gap:8px;}
 
+/* Verifiable cards wear the green (verified) look up-front so they read clearly
+   as verifiable; only cards without a verification link stay greyed out. */
+.btn-verify:not([aria-disabled="true"]){color:var(--ok);border-color:var(--ok);background:var(--ok-soft);}
+.btn-verify:not([aria-disabled="true"]):hover{color:var(--void);background:var(--ok);border-color:var(--ok);transform:translateY(-1px);}
+.btn-verify[aria-disabled="true"]{opacity:0.4;color:var(--dim);border-color:var(--line-2);background:transparent;cursor:not-allowed;}
+
 .nb-name i{font-style:italic;letter-spacing:0.01em;}
 .nb-dot{color:var(--signal);}
 .nav-clock{display:none !important;}

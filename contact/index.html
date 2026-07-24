@@ -47,6 +47,9 @@
   box-shadow:0 0 0 3px var(--signal-soft);
 }
 .cf-field input::placeholder,.cf-field textarea::placeholder{color:var(--faint);}
+.cf-phone{display:flex;gap:8px;}
+.cf-phone .cf-cc{width:96px;flex:none;text-align:center;letter-spacing:.06em;}
+.cf-phone .cf-num{flex:1;min-width:0;}
 
 .cf-field.invalid input,.cf-field.invalid textarea,.cf-field.invalid select{
   border-color:var(--burn);box-shadow:0 0 0 3px var(--burn-soft);
@@ -170,7 +173,12 @@
         <div class="cf-row">
           <div class="cf-field" id="f-phone">
             <label for="in-phone">Contact Number <span class="opt">(optional)</span></label>
-            <input id="in-phone" name="phone" type="tel" autocomplete="tel" placeholder="+94 7X XXX XXXX">
+            <div class="cf-phone">
+              <input id="in-cc" name="country_code" type="tel" inputmode="tel" autocomplete="tel-country-code"
+                     class="cf-cc" placeholder="+94" aria-label="Country code" maxlength="6">
+              <input id="in-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national"
+                     class="cf-num" placeholder="77 123 4567">
+            </div>
             <span class="cf-err"></span>
           </div>
           <div class="cf-field" id="f-topic">
@@ -258,9 +266,23 @@ const CONTACT_CONFIG = {
     name:    v => v.trim().length >= 2            || "Please enter your name.",
     email:   v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || "Enter a valid email address.",
     subject: v => v.trim().length >= 3            || "Give your message a subject.",
-    message: v => v.trim().length >= 10           || "Please add a little more detail (10+ characters).",
-    phone:   v => v.trim()===""  || /^[+()\-\s\d]{6,}$/.test(v.trim()) || "That doesn't look like a valid number."
+    message: v => v.trim().length >= 10           || "Please add a little more detail (10+ characters)."
   };
+
+  // Phone is optional, but if a number is entered we require the country code
+  // too — so international contacts are always reachable.
+  function validatePhoneGroup(){
+    const ccEl = form.elements.country_code, numEl = form.elements.phone;
+    const cc = ccEl.value.trim(), num = numEl.value.trim();
+    let msg = null, bad = null;
+    if(num !== ""){
+      if(!/^[()\-\s\d]{4,}$/.test(num)){ msg = "That doesn't look like a valid number."; bad = numEl; }
+      else if(cc === ""){ msg = "Add your country code (e.g. +94)."; bad = ccEl; }
+      else if(!/^\+?\d{1,4}$/.test(cc.replace(/\s/g,""))){ msg = "Enter a valid country code (e.g. +94)."; bad = ccEl; }
+    }
+    setError("phone", msg);
+    return bad;
+  }
 
   function fieldOf(name){ return document.getElementById("f-"+name); }
 
@@ -281,6 +303,8 @@ const CONTACT_CONFIG = {
       if(res !== true){ setError(key,res); if(!firstBad) firstBad = input; }
       else setError(key,null);
     }
+    const phoneBad = validatePhoneGroup();
+    if(phoneBad && !firstBad) firstBad = phoneBad;
     return firstBad;
   }
 
@@ -290,6 +314,10 @@ const CONTACT_CONFIG = {
     input.addEventListener("input", ()=>{
       if(fieldOf(key).classList.contains("invalid") && RULES[key](input.value)===true) setError(key,null);
     });
+  });
+  ["country_code","phone"].forEach(n=>{
+    const el = form.elements[n]; if(!el) return;
+    el.addEventListener("input", ()=>{ if(fieldOf("phone").classList.contains("invalid")) validatePhoneGroup(); });
   });
 
   function busy(on){
@@ -314,7 +342,7 @@ const CONTACT_CONFIG = {
     const data = {
       name:    form.elements.name.value.trim(),
       email:   form.elements.email.value.trim(),
-      phone:   form.elements.phone.value.trim() || "—",
+      phone:   (function(){ var cc=form.elements.country_code.value.trim(), n=form.elements.phone.value.trim(); return n ? ((cc?cc+" ":"")+n) : "—"; })(),
       topic:   form.elements.topic.value,
       subject: CONTACT_CONFIG.subjectPrefix + form.elements.subject.value.trim(),
       message: form.elements.message.value.trim()
