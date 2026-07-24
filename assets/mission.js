@@ -74,6 +74,12 @@ function initStars(){
   new IntersectionObserver(en=>{visible = en[0].isIntersecting;}).observe(cv);
   document.addEventListener("visibilitychange",()=>{ visible = !document.hidden; });
 
+  // Clear any warp state on load / back-forward-cache restore, so a page left
+  // mid-warp can't come back with its streaks frozen over the static screen.
+  function resetWarp(){ warpLevel=0; window._starWarpDir=0; shoot=null; for(const s of stars){ s._wi=false; } }
+  resetWarp();
+  addEventListener("pageshow", e=>{ if(e.persisted) resetWarp(); });
+
   ticker.add((dt,now)=>{
     if(!visible) return;
     mouse.x = lerp(mouse.x,mouse.tx,0.03); mouse.y = lerp(mouse.y,mouse.ty,0.03);

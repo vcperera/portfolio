@@ -98,7 +98,14 @@
       for(i2=0;i2<P;i2++){
         var xx=slotX[i2]|0, yy=slotY[i2]|0; if(xx<0)xx=0; if(yy<0)yy=0; if(xx>=TW)xx=TW-1; if(yy>=TH)yy=TH-1;
         var c=RGBv(e,xx,yy);
-        col[i2*3]=punch(c[0]); col[i2*3+1]=punch(c[1]); col[i2*3+2]=punch(c[2]);
+        var pr=punch(c[0]), pg=punch(c[1]), pb=punch(c[2]);
+        // Boost vibrancy: push each channel away from its luminance so colors
+        // read ~29% more saturated (chroma x1.29), then clamp to [0,1].
+        var lum=0.299*pr+0.587*pg+0.114*pb, SAT=1.29;
+        pr=lum+(pr-lum)*SAT; pg=lum+(pg-lum)*SAT; pb=lum+(pb-lum)*SAT;
+        col[i2*3]  = pr<0?0:pr>1?1:pr;
+        col[i2*3+1]= pg<0?0:pg>1?1:pg;
+        col[i2*3+2]= pb<0?0:pb>1?1:pb;
         al[i2]=(A(e,xx,yy)>ATH)?1:0; dd[i2]=det[e][yy*TW+xx];
       }
       ECOL.push(col); EAL.push(al); EDET.push(dd);
