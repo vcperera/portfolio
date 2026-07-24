@@ -146,7 +146,11 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
 .h-sub .hl{color:var(--ink);font-weight:600;}
 .h-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding-top:clamp(18px,7vh,100px);margin-top:-50px;}
 
-.hero-orbit{position:relative;display:flex;align-items:center;justify-content:center;min-height:420px;margin-top:-30px;}
+/* Keep the hero text + CTA above the avatar so its (later-in-DOM, overlapping)
+   canvas can't intercept taps on the buttons on mobile. */
+.hero-text{position:relative;z-index:2;}
+.h-cta{position:relative;z-index:3;}
+.hero-orbit{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:420px;margin-top:-30px;}
 .vish-avatar{width:min(44vw,540px);cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;}
 .vish-avatar svg{width:100%;height:auto;display:block;overflow:visible;}
 #vish-avatar canvas {
@@ -175,6 +179,14 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
 .scrub .em{color:var(--signal-2);font-weight:600;}
 .scrub .em2{color:var(--burn);font-weight:600;}
 .scrub .hand{font-family:var(--hand);font-weight:700;font-size:1.25em;}
+
+/* "Learn > Engineer > Scale." — site font, italic, theme-coherent colours. */
+.les-line{display:block;text-align:left;margin-top:16px;font-family:var(--sans);
+  font-style:italic;font-weight:600;font-size:1.18em;letter-spacing:0.005em;}
+.les-line .les-a{color:var(--burn);}
+.les-line .les-b{color:var(--signal);}
+.les-line .les-c{color:var(--ok);}
+.les-line .les-sep{color:var(--faint);font-style:normal;font-weight:500;margin:0 0.42em;}
 .scrub .monologue{
   font-family:var(--hand);
   font-weight:600;
@@ -672,8 +684,8 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
   .c-peek{right:-20px;}
   .c-peek .bubble{
     left:auto;
-    right:60px;
-    top:-100px;
+    right:56px;
+    top:-34px;
     font-size:0.92rem;
     padding:6px 10px;
   }
@@ -946,10 +958,8 @@ body.booted .ace-chart{opacity:1;transform:scale(1) translateY(4px);}
           At my core, I am deeply passionate on
           <span class="em">Aerospace</span>, <span class="em2">Tech</span>, and <span class="em">Finance</span><br><br>
           When I step away from the desk, <br> I'm either a <span class="em2">Pro-Athlete</span> or I... just get back to my seat.<br><br>
-          <span class="les-line" style="display: block; text-align: left; font-family: var(--hand); font-weight: 700; font-size: 1.6em; margin-top: 8px;">
-          <span style="color: #cf3311;">Learn</span> &gt; 
-          <span style="color: #4f8bf0;">Engineer</span> &gt; 
-          <span style="color: #38b779;">Scale</span>.
+          <span class="les-line">
+          <span class="les-a">Learn</span><span class="les-sep">&gt;</span><span class="les-b">Engineer</span><span class="les-sep">&gt;</span><span class="les-c">Scale.</span>
           </span>
           </p>
         </div>

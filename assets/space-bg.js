@@ -832,8 +832,12 @@
     spires: function (g, vw, lh, R) {
       var hz = lh * 0.62, waterY = lh * 0.80;
       horizonGlow(g, vw, lh, hz + lh * 0.05, CFG.horizon, CFG.horizon2, 1);
-      var prr = Math.min(vw * 0.105, lh * 0.30);
-      var px = vw * 0.74, py = Math.max(prr * 1.6, lh * 0.30);
+      /* On narrow (mobile) layouts, tuck the world into the top-right corner and
+         shrink it so it clears the left-aligned "Got a mission?" heading. */
+      var narrow = vw < 760;
+      var prr = narrow ? Math.min(vw * 0.13, lh * 0.16) : Math.min(vw * 0.105, lh * 0.30);
+      var px = narrow ? vw * 0.83 : vw * 0.74;
+      var py = narrow ? prr * 1.12 : Math.max(prr * 1.6, lh * 0.30);
       skyWorld(g, px, py, prr, R);
       /* crescent removed — it sat behind the COMMS "Got a mission?" title */
 
@@ -1002,71 +1006,66 @@
 
     /* CERTIFICATIONS — bioluminescent dunes, standing monoliths, and a
        colossal planetrise: a world so close its limb swallows the horizon */
+    /* ACCOLADES — a becalmed alien basin: a ringed world low over rolling
+       jade dunes, a small crescent moon, and slow aurora off the horizon. */
     dunes: function (g, vw, lh, R) {
       var hz = lh * 0.60, h0 = CFG.horizon[0];
+      var narrow = vw < 760;
       horizonGlow(g, vw, lh, hz + lh * 0.05, CFG.horizon, CFG.horizon2, 1.05);
-      /* planetrise — only the upper limb of a giant world shows */
-      var RR = vw * 0.52, pcx = vw * 0.64, pcy = hz + RR * 0.88;
-      var pg = g.createRadialGradient(pcx, pcy - RR * 0.55, RR * 0.3, pcx, pcy, RR);
-      pg.addColorStop(0, hsla(h0 + 20, 45, 40, 1));
-      pg.addColorStop(0.8, hsla(h0 + 30, 50, 22, 1));
-      pg.addColorStop(1, hsla(h0 + 36, 55, 9, 1));
-      g.fillStyle = pg;
-      g.beginPath(); g.arc(pcx, pcy, RR, 0, TAU); g.fill();
+
+      /* the ringed gas giant sitting low over the hills — drawn before the
+         ridges so its base is occluded by the dunes and it reads as rising. */
+      var pr = Math.min(vw * (narrow ? 0.19 : 0.13), lh * 0.34);
+      var px = narrow ? vw * 0.74 : vw * 0.70, py = hz - pr * 0.12;
+      skyPlanet(g, px, py, pr, h0 + 2, true, R);
+
+      /* a small crescent moon, high on the opposite side */
+      crescentMoon(g, vw * 0.20, lh * 0.15, Math.max(7, vw * 0.015), -0.5);
+
+      /* slow aurora curtains breathing up off the horizon */
       g.save();
-      g.beginPath(); g.arc(pcx, pcy, RR, 0, TAU); g.clip();
-      for (var pb = 0; pb < 6; pb++) {
-        g.fillStyle = hsla(h0 + 14 + (R() - 0.5) * 20, 40, 30 + R() * 22, 0.08 + R() * 0.08);
+      g.globalCompositeOperation = "lighter";
+      for (var a = 0; a < 3; a++) {
+        var ax = vw * (0.12 + R() * 0.72), topY = lh * (0.04 + R() * 0.10);
+        var ah = h0 + (R() - 0.5) * 26;
+        var ag = g.createLinearGradient(0, topY, 0, hz);
+        ag.addColorStop(0, hsla(ah, 78, 60, 0));
+        ag.addColorStop(0.45, hsla(ah, 78, 58, 0.08));
+        ag.addColorStop(1, hsla(ah + 18, 78, 56, 0));
+        g.fillStyle = ag;
+        var aw = vw * (0.05 + R() * 0.05), drift = (R() - 0.5) * vw * 0.24;
         g.beginPath();
-        g.ellipse(pcx, pcy - RR + (pb + 0.5) / 6 * RR * 0.7,
-                  RR * 1.02, RR * (0.02 + R() * 0.03), 0, 0, TAU);
-        g.fill();
+        g.moveTo(ax - aw, hz);
+        g.bezierCurveTo(ax - aw + drift * 0.4, lh * 0.4, ax - aw * 0.5 + drift, topY + lh * 0.1, ax + drift, topY);
+        g.lineTo(ax + aw * 0.7 + drift, topY);
+        g.bezierCurveTo(ax + aw * 0.6 + drift * 0.6, lh * 0.35, ax + aw, lh * 0.5, ax + aw, hz);
+        g.closePath(); g.fill();
       }
       g.restore();
-      /* limb glow where its atmosphere meets space */
-      g.globalCompositeOperation = "lighter";
-      g.strokeStyle = hsla(h0 - 8, 80, 70, 0.30);
-      g.lineWidth = Math.max(1.5, RR * 0.004);
-      g.beginPath(); g.arc(pcx, pcy, RR * 1.002, Math.PI * 1.05, Math.PI * 1.95); g.stroke();
-      g.globalCompositeOperation = "source-over";
-      /* a comet fixed in the sky */
-      g.save();
-      g.globalCompositeOperation = "lighter";
-      var cx2 = vw * 0.24, cy2 = lh * 0.14;
-      for (var i = 0; i < 26; i++) {
-        var t = i / 26;
-        puff(g, cx2 + t * vw * 0.10, cy2 - t * lh * 0.10,
-             lh * (0.004 + 0.012 * (1 - t)), 190, 70, 78, 0.06 * (1 - t));
-      }
-      puff(g, cx2, cy2, lh * 0.012, 190, 30, 95, 0.7);
-      g.restore();
-      /* smooth dunes, lit crests */
+
+      /* layered rolling dunes — atmospheric far→near with a crest rim-light */
       var backs = [
-        { base: hz,             amp: lh * 0.10, col: hsla(h0, 40, 17, 0.85), rough: 0.45 },
-        { base: hz + lh * 0.10, amp: lh * 0.13, col: hsla(h0 + 8, 38, 10, 0.95), rough: 0.42 },
-        { base: lh * 0.995,     amp: lh * 0.17, col: "hsl(170,35%,4%)", rough: 0.4 }
+        { base: hz,           amp: lh * 0.085, col: hsla(h0,      34, 21, 0.85), rough: 0.30, rim: 0.13 },
+        { base: hz + lh*0.10, amp: lh * 0.125, col: hsla(h0 + 5,  34, 14, 0.93), rough: 0.34, rim: 0.15 },
+        { base: hz + lh*0.24, amp: lh * 0.16,  col: hsla(h0 + 10, 32, 9,  0.97), rough: 0.38, rim: 0.17 },
+        { base: lh * 0.995,   amp: lh * 0.20,  col: "hsl(168,34%,4%)",           rough: 0.42, rim: 0.22 }
       ];
       for (var d = 0; d < backs.length; d++) {
-        var arr = ridgeline(R, 96, backs[d].rough);
+        var arr = ridgeline(R, 120, backs[d].rough);
         fillRidge(g, vw, lh, arr, backs[d].base, backs[d].amp, backs[d].col);
         ridgeTopStroke(g, vw, lh, arr, backs[d].base, backs[d].amp,
-                       hsla(h0 - 6, 65, 65, 0.10 + d * 0.06), 1);
+                       hsla(h0 - 6, 60, 66, backs[d].rim), 1);
       }
-      /* monoliths */
-      for (var m = 0; m < 3; m++) {
-        var mx2 = vw * (0.15 + R() * 0.7), mw2 = vw * (0.006 + R() * 0.008);
-        var mh2 = lh * (0.22 + R() * 0.20), baseY2 = lh * (0.78 + R() * 0.12);
-        var lean = (R() - 0.5) * 0.1;
-        g.save();
-        g.translate(mx2, baseY2);
-        g.rotate(lean);
-        g.fillStyle = "hsl(180,25%,3%)";
-        g.fillRect(-mw2, -mh2, mw2 * 2, mh2);
-        g.globalCompositeOperation = "lighter";
-        g.fillStyle = hsla(h0 - 10, 80, 66, 0.30);
-        g.fillRect(mw2 * 0.55, -mh2, mw2 * 0.4, mh2);
-        g.restore();
+
+      /* fine wind-blown grain on the near dunes for surface texture */
+      g.save();
+      g.globalCompositeOperation = "lighter";
+      for (var s = 0; s < 60; s++) {
+        var gx = R() * vw, gy = hz + lh * 0.30 + R() * lh * 0.36;
+        g.fillStyle = hsla(h0 - 4, 55, 62, 0.02 + R() * 0.045);
+        g.fillRect(gx, gy, vw * (0.01 + R() * 0.03), Math.max(1, lh * 0.002));
       }
+      g.restore();
     }
   };
 
