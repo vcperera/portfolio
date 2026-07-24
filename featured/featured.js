@@ -46,7 +46,7 @@ POSTS = rows.map(r=>{
     tags:parseTags(r[iTags]),
     scaleThumb: scaleThumb
   };
-}).sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
+}).sort((a,b)=>b.id.localeCompare(a.id,undefined,{numeric:true})); // descending: newest (highest ID) first
 }
 
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}

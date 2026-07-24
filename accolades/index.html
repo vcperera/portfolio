@@ -17,6 +17,24 @@
 #m-docwrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
 .modal-doc{width:min(88vw,1000px);height:86vh;}
 
+/* Mobile certificate viewer: a high-resolution webp render of the PDF shown in
+   a pinch-zoom + drag viewer (mobile browsers can't render PDFs inline, which
+   left an empty "Open" card). Desktop keeps the PDF iframe. */
+.doc-view{position:relative;width:min(94vw,1000px);height:86vh;overflow:hidden;border-radius:4px;
+  background:#111;border:1px solid var(--line-2);}
+.doc-img-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;touch-action:none;cursor:grab;}
+.doc-img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;
+  transform-origin:0 0;will-change:transform;-webkit-user-select:none;user-select:none;
+  -webkit-user-drag:none;pointer-events:none;background:#fff;}
+.doc-open{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:5;
+  font-family:var(--mono,monospace);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  padding:9px 16px;border-radius:999px;background:rgba(18,20,26,0.82);border:1px solid var(--line-2);
+  color:var(--dim);text-decoration:none;display:inline-flex;gap:7px;align-items:center;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.doc-open:active,.doc-open:hover{color:var(--signal);border-color:var(--signal);}
+.doc-open svg{width:13px;height:13px;}
+
 .card .card-issuer{display:flex;align-items:center;gap:8px;}
 
 .nb-name i{font-style:italic;letter-spacing:0.01em;}
@@ -467,21 +485,129 @@ function render(){
 
 const modal=document.getElementById("modal");
 const closeBtn=document.getElementById("m-close");
+
+// Mobile browsers can't render PDFs inline in an iframe, so on touch / narrow
+// screens we show a high-resolution webp render of the certificate instead.
+function usesImageViewer(){
+  return window.matchMedia("(pointer:coarse)").matches || window.matchMedia("(max-width:900px)").matches;
+}
+// Map .../pdfs/Name.pdf -> .../full/Name.webp (high-res render, sharp on zoom).
+function fullImgUrl(fileUrl){
+  return String(fileUrl).replace("/pdfs/","/full/").replace(/\.pdf($|[?#])/i,".webp$1");
+}
+
 function openModal(idx){
   const c=CERTIFICATES[idx];
-  const src=`${attr(c.fileUrl)}#toolbar=0&navpanes=0&scrollbar=0&view=Fit`;
   const wrap=document.getElementById("m-docwrap");
-  wrap.innerHTML=`<iframe class="modal-doc" src="${src}" title="${attr(c.title)}"></iframe>`;
-  const iframe=wrap.querySelector(".modal-doc");
-  if(c.thumb){
-    const probe=new Image();
-    probe.onload=()=>{ if(probe.naturalWidth&&probe.naturalHeight)
-      iframe.style.aspectRatio = probe.naturalWidth+" / "+probe.naturalHeight; };
-    probe.src=c.thumb;
+
+  if(usesImageViewer()){
+    wrap.innerHTML=
+      '<div class="doc-view">'+
+        '<div class="doc-img-wrap" id="doc-img-wrap">'+
+          '<img class="doc-img" id="doc-img" alt="'+attr(c.title)+'" src="'+attr(fullImgUrl(c.fileUrl))+'" draggable="false">'+
+        '</div>'+
+        '<a class="doc-open" href="'+attr(c.fileUrl)+'" target="_blank" rel="noopener">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>'+
+          'Open PDF</a>'+
+      '</div>';
+    const img=wrap.querySelector("#doc-img");
+    // If a full render is somehow missing, fall back to the grid thumbnail.
+    img.onerror=()=>{ if(c.thumb && img.src.indexOf(c.thumb)===-1){ img.onerror=null; img.src=c.thumb; } };
+    initZoom(wrap.querySelector("#doc-img-wrap"), img);
+  } else {
+    const src=attr(c.fileUrl)+"#toolbar=0&navpanes=0&scrollbar=0&view=Fit";
+    wrap.innerHTML='<iframe class="modal-doc" src="'+src+'" title="'+attr(c.title)+'"></iframe>';
+    const iframe=wrap.querySelector(".modal-doc");
+    if(c.thumb){
+      const probe=new Image();
+      probe.onload=()=>{ if(probe.naturalWidth&&probe.naturalHeight)
+        iframe.style.aspectRatio = probe.naturalWidth+" / "+probe.naturalHeight; };
+      probe.src=c.thumb;
+    }
   }
+
   modal.classList.add("open");
   closeBtn.style.display="flex";
   document.body.style.overflow="hidden";
+}
+
+/* Lightweight pinch-zoom + drag + double-tap for the certificate image.
+   No library: transforms are translate()+scale() from the top-left origin. */
+function initZoom(box, img){
+  let scale=1, tx=0, ty=0;
+  const MIN=1, MAX=5;
+  const pts=new Map();          // active pointers
+  let startDist=0, startScale=1, startMid={x:0,y:0}, startTx=0, startTy=0;
+  let lastTap=0;
+
+  function apply(){ img.style.transform="translate("+tx+"px,"+ty+"px) scale("+scale+")"; }
+  function rect(){ return box.getBoundingClientRect(); }
+  // Keep the (scaled) image from being dragged past sensible bounds.
+  function clamp(){
+    const r=rect(), iw=img.clientWidth*scale, ih=img.clientHeight*scale;
+    // horizontal
+    if(iw<=r.width){ tx=(r.width-iw)/2; }
+    else { tx=Math.min(0,Math.max(r.width-iw,tx)); }
+    // vertical
+    if(ih<=r.height){ ty=(r.height-ih)/2; }
+    else { ty=Math.min(0,Math.max(r.height-ih,ty)); }
+  }
+  function setScaleAbout(newScale, cx, cy){
+    newScale=Math.max(MIN,Math.min(MAX,newScale));
+    const r=rect(), px=cx-r.left, py=cy-r.top;
+    // keep the point under the fingers stationary
+    tx = px-( (px-tx)*(newScale/scale) );
+    ty = py-( (py-ty)*(newScale/scale) );
+    scale=newScale; clamp(); apply();
+  }
+
+  box.addEventListener("pointerdown",e=>{
+    box.setPointerCapture(e.pointerId);
+    pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2){
+      const p=[...pts.values()];
+      startDist=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);
+      startScale=scale;
+      startMid={x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2};
+    }
+    box.style.cursor="grabbing";
+  });
+
+  box.addEventListener("pointermove",e=>{
+    if(!pts.has(e.pointerId)) return;
+    const prev=pts.get(e.pointerId);
+    pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2){
+      const p=[...pts.values()];
+      const dist=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);
+      if(startDist>0){
+        const mid={x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2};
+        setScaleAbout(startScale*(dist/startDist), mid.x, mid.y);
+      }
+    } else if(pts.size===1 && scale>1){
+      tx+=e.clientX-prev.x; ty+=e.clientY-prev.y; clamp(); apply();
+    }
+  });
+
+  function up(e){
+    pts.delete(e.pointerId);
+    if(pts.size<2) startDist=0;
+    if(pts.size===0) box.style.cursor="grab";
+  }
+  box.addEventListener("pointerup",up);
+  box.addEventListener("pointercancel",up);
+
+  // Double-tap / double-click to toggle zoom at the tap point.
+  box.addEventListener("pointerup",e=>{
+    const now=Date.now();
+    if(now-lastTap<300){
+      if(scale>1.05){ scale=1; clamp(); apply(); }
+      else { setScaleAbout(2.6, e.clientX, e.clientY); }
+      lastTap=0;
+    } else { lastTap=now; }
+  });
+
+  img.addEventListener("load",()=>{ scale=1; tx=0; ty=0; clamp(); apply(); });
 }
 function closeModal(){
   modal.classList.remove("open");

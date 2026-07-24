@@ -61,7 +61,7 @@ async function loadProjects(){
     };
   })
   .filter(p => p !== null)
-  .sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
+  .sort((a,b)=>b.id.localeCompare(a.id,undefined,{numeric:true})); // descending: newest (highest ID) first
 }
 
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
@@ -298,6 +298,63 @@ const projectNavEl = document.getElementById("project-nav");
 const projectPrevBtn = document.getElementById("project-prev");
 const projectNextBtn = document.getElementById("project-next");
 
+/* Dynamic fit: keep the title on one line and scale the brief so the whole
+   thing is visible with no inner scrollbar on PC. On mobile the title is still
+   fit to one line, but the brief keeps its base size (the card scrolls). */
+function fitDetail(){
+  const body = document.getElementById("detail-body");
+  if(!body || !detailModal.classList.contains("open")) return;
+  const isDesktop = window.matchMedia("(min-width:901px)").matches;
+
+  // Title -> prefer one line; fall back to (at most) two lines, never clipped.
+  const title = body.querySelector(".detail-title");
+  if(title){
+    title.style.whiteSpace = "nowrap";
+    title.style.fontSize = "";
+    const base = parseFloat(getComputedStyle(title).fontSize);
+    const lh = parseFloat(getComputedStyle(title).lineHeight) / base || 1.3;
+    const floor = isDesktop ? 15 : 13;
+    let fs = base, guard = 0;
+    // Phase 1: shrink to fit a single line.
+    while(title.scrollWidth > title.clientWidth + 1 && fs > floor && guard++ < 120){
+      fs -= 0.5; title.style.fontSize = fs + "px";
+    }
+    if(title.scrollWidth > title.clientWidth + 1){
+      // Phase 2: won't fit one line at the floor -> allow up to two lines,
+      // shrinking only as far as needed to keep it to two lines (no cut-off).
+      title.style.whiteSpace = "normal";
+      fs = base; title.style.fontSize = fs + "px";
+      guard = 0;
+      while(title.scrollHeight > fs * lh * 2 + 2 && fs > floor && guard++ < 120){
+        fs -= 0.5; title.style.fontSize = fs + "px";
+      }
+    } else {
+      title.style.whiteSpace = "nowrap";
+    }
+  }
+
+  // Brief -> fit height without a scrollbar (desktop only)
+  const exp = body.querySelector(".detail-explanation");
+  if(exp){
+    const ps = exp.querySelectorAll("p");
+    ps.forEach(p => p.style.fontSize = "");            // reset to CSS base
+    if(isDesktop){
+      let fs = parseFloat(getComputedStyle(ps[0] || exp).fontSize);
+      let guard = 0;
+      while(exp.scrollHeight > exp.clientHeight + 1 && fs > 9.5 && guard++ < 120){
+        fs -= 0.5;
+        ps.forEach(p => p.style.fontSize = fs + "px");
+      }
+    }
+  }
+}
+
+let _fitRAF = null;
+function scheduleFit(){
+  if(_fitRAF) cancelAnimationFrame(_fitRAF);
+  _fitRAF = requestAnimationFrame(()=>requestAnimationFrame(fitDetail));
+}
+
 function navigableProjects(){ return PROJECTS.filter(p=>p.hasMedia); }
 
 function goToProjectOffset(offset){
@@ -335,6 +392,9 @@ async function openDetail(id) {
   projectNavEl.style.display = navigableProjects().length > 1 ? "flex" : "none";
   document.body.style.overflow = "hidden";
 
+  scheduleFit();
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(scheduleFit); }
+
   setTimeout(lazyLoadThumbnails, 300);
   startSlideshow();
 }
@@ -356,6 +416,7 @@ detailModal.addEventListener("click", e=>{ if(e.target===detailModal) closeDetai
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape" && detailModal.classList.contains("open")) closeDetail();
 });
+window.addEventListener("resize", ()=>{ if(detailModal.classList.contains("open")) scheduleFit(); });
 
 (async function init(){
   try{ await loadProjects(); }

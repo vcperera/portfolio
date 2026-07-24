@@ -410,8 +410,8 @@ function initNav(){
 }
 
 function initStats(){
-  const viewsEl=qs("#stat-views"), visEl=qs("#stat-visitors");
-  if(!viewsEl && !visEl) return;
+  const viewsEl=qs("#stat-views");
+  if(!viewsEl) return;
   const code=window.GC_CODE;
   const fmt=n=>{
     n=+n||0;
@@ -421,16 +421,17 @@ function initStats(){
     return String(n);
   };
   const set=(el,v)=>{ if(el){ el.textContent=fmt(v); el.classList.remove("loading"); } };
-  if(!code || code==="YOUR_CODE_HERE"){ if(viewsEl)viewsEl.textContent="—"; if(visEl)visEl.textContent="—"; return; }
+  if(!code || code==="YOUR_CODE_HERE"){ viewsEl.textContent="—"; return; }
   const base="https://"+code+".goatcounter.com/counter/";
-  // One request returns BOTH totals: count = pageviews (every landing),
-  // count_unique = unique visitors. cache:"no-store" bypasses the browser's
-  // own HTTP cache so each load reflects GoatCounter's freshest value.
-  // (GoatCounter still caches this endpoint server-side for up to ~4h, so the
-  //  numbers can lag reality by that much - that ceiling can't be removed.)
+  // We read count = total pageviews (every landing). The header shows views
+  // only; unique-visitor totals are intentionally not displayed.
+  // cache:"no-store" bypasses the browser's own HTTP cache so each load
+  // reflects GoatCounter's freshest value. (GoatCounter still caches this
+  // endpoint server-side for up to ~4h, so the number can lag reality by that
+  // much - that ceiling can't be removed.)
   fetch(base+"TOTAL.json", {cache:"no-store"})
     .then(r=>r.json())
-    .then(d=>{ set(viewsEl, d.count); set(visEl, d.count_unique); })
+    .then(d=>{ set(viewsEl, d.count); })
     .catch(()=>{});
 }
 

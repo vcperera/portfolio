@@ -14,12 +14,21 @@
 <link rel="stylesheet" href="/assets/mission.css">
 <style>
 
-.modal-project{width:92vw;max-width:1440px;height:85vh;max-height:920px;display:flex;overflow:hidden;
+/* Overlay scrolls the card itself (never the page) and contains its scroll so
+   the projects list behind stays locked while a card is open. */
+.modal-overlay{align-items:flex-start;overflow-y:auto;overscroll-behavior:contain;}
+/* Card grows to fit its full brief: no inner scrollbar on PC for real content;
+   it is only capped (and made scrollable) if a brief exceeds the viewport. */
+.modal-project{width:92vw;max-width:1440px;height:auto;min-height:440px;max-height:92vh;
+  margin:auto;display:flex;overflow:hidden;
   border-radius:5px;border:1px solid var(--line-2);box-shadow:0 40px 120px rgba(0,0,0,0.7);}
-@media (max-width:900px){ .modal-project{flex-direction:column;width:94vw;height:90vh;} }
+@media (max-width:900px){
+  .modal-overlay{align-items:flex-start;padding:14px;}
+  .modal-project{flex-direction:column;width:94vw;height:auto;min-height:0;max-height:none;margin:auto;}
+}
 .detail-media{flex:0 0 60%;min-width:0;display:flex;flex-direction:column;gap:10px;min-height:0;
   background:var(--panel);padding:20px;}
-@media (max-width:900px){ .detail-media{flex:1 1 55%;} }
+@media (max-width:900px){ .detail-media{flex:none;} .media-main{flex:none;height:44vh;} }
 .media-main{position:relative;flex:1;min-height:0;background:var(--void-2);border:1px solid var(--line);
   border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
 .media-main::before{content:"";position:absolute;top:8px;left:8px;width:14px;height:14px;z-index:2;
@@ -36,15 +45,17 @@
 .media-thumb:hover{opacity:1;}
 .detail-text{flex:0 0 40%;min-width:0;display:flex;flex-direction:column;min-height:0;overflow:hidden;
   background:var(--panel-2);padding:34px 36px;border-left:1px solid var(--line);position:relative;}
-@media (max-width:900px){ .detail-text{flex:1 1 45%;border-left:none;border-top:1px solid var(--line);padding:24px;} }
+@media (max-width:900px){ .detail-text{flex:none;overflow:visible;border-left:none;border-top:1px solid var(--line);padding:24px;} }
 .detail-text::before{content:"// MISSION BRIEF";position:absolute;top:14px;right:16px;
   font-family:var(--mono);font-size:8.5px;letter-spacing:0.26em;color:var(--faint);}
-.detail-title{font-size:1.24rem;font-weight:700;letter-spacing:-0.015em;color:var(--ink);line-height:1.3;flex:none;}
+.detail-title{font-size:1.24rem;font-weight:700;letter-spacing:-0.015em;color:var(--ink);line-height:1.3;flex:none;
+  white-space:nowrap;overflow:hidden;}
 .detail-desc{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:0.12em;
   text-transform:uppercase;color:var(--ok);margin-top:12px;line-height:1.6;flex:none;}
 .detail-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;flex:none;}
-.detail-explanation{margin-top:20px;flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;
+.detail-explanation{margin-top:18px;flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;
   padding-right:6px;}
+@media (max-width:900px){ .detail-explanation{flex:none;overflow:visible;padding-right:0;} }
 .detail-explanation p{font-size:0.84rem;color:var(--dim);line-height:1.7;margin-bottom:14px;}
 .detail-explanation p:last-child{margin-bottom:0;}
 .detail-explanation p::first-letter{color:var(--signal-2);}

@@ -560,7 +560,7 @@ async function initMissions(){
     projects=rows.map(r=>({
       id:(r.ID||"").trim(), title:(r.Title||"").trim(), desc:(r.Description||"").trim(),
       thumb:(r.Thumbnail||"").trim(), tags:(r.Tags||"").trim()
-    })).sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
+    })).sort((a,b)=>b.id.localeCompare(a.id,undefined,{numeric:true})); // descending: newest (highest ID) first
   }catch(_){
     root.innerHTML=`<div class="empty-state" style="padding:44px 10px;">MISSION DATA OFFLINE — run the local server (see README) or visit the Projects page.</div>`;
     return;
@@ -570,7 +570,7 @@ async function initMissions(){
     const award=p.desc||"In development";
     const isAward=/win|award|grant|semi|best/i.test(award);
     return `<a class="mrow" href="projects/index.html" data-cursor="OPEN" data-thumb="${p.thumb?("projects/"+esc(p.thumb)):""}" data-tag="${esc(p.tags)}">
-      <span class="mi">0${p.id}</span>
+      <span class="mi">${String(i+1).padStart(2,"0")}</span>
       <span class="mt">
         <h3>${esc(p.title)}</h3>
         <span class="md${isAward?" aw":""}">${isAward?'<span class="aw">◆ </span>':""}${esc(award)}</span>
